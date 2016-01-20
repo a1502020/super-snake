@@ -7,7 +7,7 @@
     <ProjectGuid>{2ED974FF-E3C5-4D35-B8BD-26F85B79D5A6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SuperSnakeCore</RootNamespace>
+    <RootNamespace>SuperSnake.Core</RootNamespace>
     <AssemblyName>SuperSnakeCore</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -39,6 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CellState.cs" />
+    <Compile Include="ColorState.cs" />
+    <Compile Include="Direction.cs" />
+    <Compile Include="DirectionState.cs" />
+    <Compile Include="FieldState.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="PlayerState.cs" />
+    <Compile Include="PositionState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
