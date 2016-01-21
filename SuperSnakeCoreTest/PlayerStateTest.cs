@@ -11,13 +11,21 @@ namespace SuperSnakeCoreTest
         public void 同じパラメータで生成されたPlayerStateは等しい()
         {
             Assert.IsTrue(CreateDummyPlayerState1() == CreateDummyPlayerState1());
+            Assert.IsTrue(CreateDummyPlayerState1().Equals(CreateDummyPlayerState1()));
             Assert.IsTrue(CreateDummyPlayerState2() == CreateDummyPlayerState2());
+            Assert.IsTrue(CreateDummyPlayerState2().Equals(CreateDummyPlayerState2()));
             Assert.IsFalse(CreateDummyPlayerState1() == CreateDummyPlayerState1a());
+            Assert.IsFalse(CreateDummyPlayerState1().Equals(CreateDummyPlayerState1a()));
             Assert.IsFalse(CreateDummyPlayerState1() == CreateDummyPlayerState1b());
+            Assert.IsFalse(CreateDummyPlayerState1().Equals(CreateDummyPlayerState1b()));
             Assert.IsFalse(CreateDummyPlayerState1() == CreateDummyPlayerState1c());
+            Assert.IsFalse(CreateDummyPlayerState1().Equals(CreateDummyPlayerState1c()));
             Assert.IsFalse(CreateDummyPlayerState1() == CreateDummyPlayerState1d());
+            Assert.IsFalse(CreateDummyPlayerState1().Equals(CreateDummyPlayerState1d()));
             Assert.IsFalse(CreateDummyPlayerState1() == CreateDummyPlayerState1e());
+            Assert.IsFalse(CreateDummyPlayerState1().Equals(CreateDummyPlayerState1e()));
             Assert.IsFalse(CreateDummyPlayerState1() == CreateDummyPlayerState1f());
+            Assert.IsFalse(CreateDummyPlayerState1().Equals(CreateDummyPlayerState1f()));
         }
 
         [TestMethod]

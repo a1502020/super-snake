@@ -10,79 +10,85 @@ namespace SuperSnakeCoreTest
         [TestMethod]
         public void 同じパラメータで生成されたDirectionStateは等しい()
         {
-            Assert.IsTrue(
-                new DirectionState(Direction.Right) ==
-                new DirectionState(Direction.Right)
-                );
-            Assert.IsTrue(
-                new DirectionState(Direction.RightUp) ==
-                new DirectionState(Direction.RightUp)
-                );
-            Assert.IsTrue(
-                new DirectionState(Direction.Up) ==
-                new DirectionState(Direction.Up)
-                );
-            Assert.IsTrue(
-                new DirectionState(Direction.LeftUp) ==
-                new DirectionState(Direction.LeftUp)
-                );
-            Assert.IsTrue(
-                new DirectionState(Direction.Left) ==
-                new DirectionState(Direction.Left)
-                );
-            Assert.IsTrue(
-                new DirectionState(Direction.LeftDown) ==
-                new DirectionState(Direction.LeftDown)
-                );
-            Assert.IsTrue(
-                new DirectionState(Direction.Down) ==
-                new DirectionState(Direction.Down)
-                );
-            Assert.IsTrue(
-                new DirectionState(Direction.RightDown) ==
-                new DirectionState(Direction.RightDown)
-                );
-            Assert.IsFalse(
-                new DirectionState(Direction.Right) ==
-                new DirectionState(Direction.RightUp)
-                );
-            Assert.IsFalse(
-                new DirectionState(Direction.Right) ==
-                new DirectionState(Direction.RightDown)
-                );
-            Assert.IsFalse(
-                new DirectionState(Direction.Left) ==
-                new DirectionState(Direction.LeftUp)
-                );
-            Assert.IsFalse(
-                new DirectionState(Direction.Left) ==
-                new DirectionState(Direction.LeftDown)
-                );
-            Assert.IsFalse(
-                new DirectionState(Direction.Up) ==
-                new DirectionState(Direction.Down)
-                );
+            Assert.IsTrue(CreateRight() == CreateRight());
+            Assert.IsTrue(CreateRight().Equals(CreateRight()));
+            Assert.IsTrue(CreateRightUp() == CreateRightUp());
+            Assert.IsTrue(CreateRightUp().Equals(CreateRightUp()));
+            Assert.IsTrue(CreateUp() == CreateUp());
+            Assert.IsTrue(CreateUp().Equals(CreateUp()));
+            Assert.IsTrue(CreateLeftUp() == CreateLeftUp());
+            Assert.IsTrue(CreateLeftUp().Equals(CreateLeftUp()));
+            Assert.IsTrue(CreateLeft() == CreateLeft());
+            Assert.IsTrue(CreateLeft().Equals(CreateLeft()));
+            Assert.IsTrue(CraeteLeftDown() == CraeteLeftDown());
+            Assert.IsTrue(CraeteLeftDown().Equals(CraeteLeftDown()));
+            Assert.IsTrue(CreateDown() == CreateDown());
+            Assert.IsTrue(CreateDown().Equals(CreateDown()));
+            Assert.IsTrue(CreateRightDown() == CreateRightDown());
+            Assert.IsTrue(CreateRightDown().Equals(CreateRightDown()));
+            Assert.IsFalse(CreateRight() == CreateRightUp());
+            Assert.IsFalse(CreateRight().Equals(CreateRightUp()));
+            Assert.IsFalse(CreateRight() == CreateRightDown());
+            Assert.IsFalse(CreateRight().Equals(CreateRightDown()));
+            Assert.IsFalse(CreateLeft() == CreateLeftUp());
+            Assert.IsFalse(CreateLeft().Equals(CreateLeftUp()));
+            Assert.IsFalse(CreateLeft() == CraeteLeftDown());
+            Assert.IsFalse(CreateLeft().Equals(CraeteLeftDown()));
+            Assert.IsFalse(CreateUp() == CreateDown());
+            Assert.IsFalse(CreateUp().Equals(CreateDown()));
         }
 
         [TestMethod]
         public void 各プロパティの値はコンストラクタのパラメータに等しい()
         {
-            var d1 = new DirectionState(Direction.Right);
-            Assert.IsTrue(d1.Value == Direction.Right);
-            var d2 = new DirectionState(Direction.RightUp);
-            Assert.IsTrue(d2.Value == Direction.RightUp);
-            var d3 = new DirectionState(Direction.Up);
-            Assert.IsTrue(d3.Value == Direction.Up);
-            var d4 = new DirectionState(Direction.LeftUp);
-            Assert.IsTrue(d4.Value == Direction.LeftUp);
-            var d5 = new DirectionState(Direction.Left);
-            Assert.IsTrue(d5.Value == Direction.Left);
-            var d6 = new DirectionState(Direction.LeftDown);
-            Assert.IsTrue(d6.Value == Direction.LeftDown);
-            var d7 = new DirectionState(Direction.Down);
-            Assert.IsTrue(d7.Value == Direction.Down);
-            var d8 = new DirectionState(Direction.RightDown);
-            Assert.IsTrue(d8.Value == Direction.RightDown);
+            Assert.IsTrue(CreateRight().Value == Direction.Right);
+            Assert.IsTrue(CreateRightUp().Value == Direction.RightUp);
+            Assert.IsTrue(CreateUp().Value == Direction.Up);
+            Assert.IsTrue(CreateLeftUp().Value == Direction.LeftUp);
+            Assert.IsTrue(CreateLeft().Value == Direction.Left);
+            Assert.IsTrue(CraeteLeftDown().Value == Direction.LeftDown);
+            Assert.IsTrue(CreateDown().Value == Direction.Down);
+            Assert.IsTrue(CreateRightDown().Value == Direction.RightDown);
+        }
+
+        public static DirectionState CreateRight()
+        {
+            return new DirectionState(Direction.Right);
+        }
+
+        public static DirectionState CreateRightUp()
+        {
+            return new DirectionState(Direction.RightUp);
+        }
+
+        public static DirectionState CreateUp()
+        {
+            return new DirectionState(Direction.Up);
+        }
+
+        public static DirectionState CreateLeftUp()
+        {
+            return new DirectionState(Direction.LeftUp);
+        }
+
+        public static DirectionState CreateLeft()
+        {
+            return new DirectionState(Direction.Left);
+        }
+
+        public static DirectionState CraeteLeftDown()
+        {
+            return new DirectionState(Direction.LeftDown);
+        }
+
+        public static DirectionState CreateDown()
+        {
+            return new DirectionState(Direction.Down);
+        }
+
+        public static DirectionState CreateRightDown()
+        {
+            return new DirectionState(Direction.RightDown);
         }
     }
 }

@@ -12,12 +12,19 @@ namespace SuperSnakeCoreTest
         public void 同じパラメータで生成されたFieldStateは等しい()
         {
             Assert.IsTrue(CreateDummyFieldState1() == CreateDummyFieldState1());
+            Assert.IsTrue(CreateDummyFieldState1().Equals(CreateDummyFieldState1()));
             Assert.IsTrue(CreateDummyFieldState2() == CreateDummyFieldState2());
+            Assert.IsTrue(CreateDummyFieldState2().Equals(CreateDummyFieldState2()));
             Assert.IsTrue(CreateDummyFieldState3() == CreateDummyFieldState3());
+            Assert.IsTrue(CreateDummyFieldState3().Equals(CreateDummyFieldState3()));
             Assert.IsFalse(CreateDummyFieldState1() == CreateDummyFieldState1a());
+            Assert.IsFalse(CreateDummyFieldState1().Equals(CreateDummyFieldState1a()));
             Assert.IsFalse(CreateDummyFieldState1() == CreateDummyFieldState1b());
+            Assert.IsFalse(CreateDummyFieldState1().Equals(CreateDummyFieldState1b()));
             Assert.IsFalse(CreateDummyFieldState1() == CreateDummyFieldState1c());
+            Assert.IsFalse(CreateDummyFieldState1().Equals(CreateDummyFieldState1c()));
             Assert.IsFalse(CreateDummyFieldState1() == CreateDummyFieldState1d());
+            Assert.IsFalse(CreateDummyFieldState1().Equals(CreateDummyFieldState1d()));
         }
 
         [TestMethod]

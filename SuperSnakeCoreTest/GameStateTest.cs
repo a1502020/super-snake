@@ -12,10 +12,15 @@ namespace SuperSnakeCoreTest
         public void 同じパラメータで生成されたGameStateは等しい()
         {
             Assert.IsTrue(CreateDummyGameState1() == CreateDummyGameState1());
+            Assert.IsTrue(CreateDummyGameState1().Equals(CreateDummyGameState1()));
             Assert.IsTrue(CreateDummyGameState2() == CreateDummyGameState2());
+            Assert.IsTrue(CreateDummyGameState2().Equals(CreateDummyGameState2()));
             Assert.IsFalse(CreateDummyGameState1() == CreateDummyGameState1a());
+            Assert.IsFalse(CreateDummyGameState1().Equals(CreateDummyGameState1a()));
             Assert.IsFalse(CreateDummyGameState1() == CreateDummyGameState1b());
+            Assert.IsFalse(CreateDummyGameState1().Equals(CreateDummyGameState1b()));
             Assert.IsFalse(CreateDummyGameState1() == CreateDummyGameState1c());
+            Assert.IsFalse(CreateDummyGameState1().Equals(CreateDummyGameState1c()));
         }
 
         [TestMethod]
