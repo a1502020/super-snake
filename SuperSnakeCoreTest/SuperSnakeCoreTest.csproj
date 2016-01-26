@@ -55,6 +55,7 @@
     <Compile Include="DirectionStateTest.cs" />
     <Compile Include="FieldStateTest.cs" />
     <Compile Include="GameStateTest.cs" />
+    <Compile Include="GameTest.cs" />
     <Compile Include="PlayerStateTest.cs" />
     <Compile Include="PositionStateTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

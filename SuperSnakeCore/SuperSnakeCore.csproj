@@ -39,11 +39,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action.cs" />
     <Compile Include="CellState.cs" />
     <Compile Include="ColorState.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="DirectionState.cs" />
     <Compile Include="FieldState.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="PlayerState.cs" />
     <Compile Include="PositionState.cs" />
