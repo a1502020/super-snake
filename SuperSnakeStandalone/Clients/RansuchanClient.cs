@@ -41,8 +41,14 @@ namespace SuperSnakeStandalone.Clients
             if (r) list.Add(Action.Right);
             if (s) list.Add(Action.Straight);
 
+            // どこにも行けないなら諦めてランダム
+            if (list.Count == 0)
+            {
+                list = new List<Action> { Action.Left, Action.Right, Action.Straight };
+            }
+
             // ランダムで決定
-            return list.Count == 0 ? Action.Straight : list[rnd.Next(list.Count)];
+            return list[rnd.Next(list.Count)];
         }
 
         private Random rnd;
