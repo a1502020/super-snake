@@ -60,8 +60,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DxDLL.cs" />
+    <Compile Include="GameStateDrawer.cs" />
+    <Compile Include="Key.cs" />
+    <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Size.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -82,6 +86,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SuperSnakeCore\SuperSnakeCore.csproj">
+      <Project>{2ed974ff-e3c5-4d35-b8bd-26f85b79d5a6}</Project>
+      <Name>SuperSnakeCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
