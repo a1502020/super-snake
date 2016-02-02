@@ -44,7 +44,7 @@ namespace SuperSnake.Core
             {
                 var player = State.Players[i];
                 var pos = player.Position;
-                if (isInField(pos))
+                if (isInField(pos) && player.Alive)
                 {
                     cells[pos.X][pos.Y] = new CellState(player.Color, cells[pos.X][pos.Y].Passable);
                 }
