@@ -1,15 +1,14 @@
-﻿using SuperSnakeStandalone;
+﻿using SuperSnake.Core;
+using SuperSnakeStandalone;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SuperSnake.Core;
+using Action = SuperSnake.Core.Action;
 
 namespace SuperSnakeStandalone.Clients
 {
-    using Action = SuperSnake.Core.Action;
-
     public class RansuchanClient : Client
     {
         public RansuchanClient(Random rnd)

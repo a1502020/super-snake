@@ -63,7 +63,10 @@
     <Compile Include="Clients\RansuchanClient.cs" />
     <Compile Include="DxDLL.cs" />
     <Compile Include="GameStateDrawer.cs" />
+    <Compile Include="InitialGameState.cs" />
+    <Compile Include="InitialPlayerState.cs" />
     <Compile Include="Key.cs" />
+    <Compile Include="PlayerInfo.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,6 +97,11 @@
       <Project>{2ed974ff-e3c5-4d35-b8bd-26f85b79d5a6}</Project>
       <Name>SuperSnakeCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fields\test.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
