@@ -342,7 +342,7 @@ namespace SuperSnakeCoreTest
         /// xooox #ff0000 #ffffff #ffffff #ffffff #ffff00
         /// oxoox #ffffff #ff0000 #ffffff #ffffff #ffff00
         /// oxooo #ffffff #ff0000 #ffffff #ffffff #ffffff
-        /// xoxxo #ffffff #ffffff #0000ff #0000ff #ffffff
+        /// xoxxo #ffffff #ffffff #ffffff #0000ff #ffffff
         /// xxoox #00ff00 #00ff00 #ffffff #ffffff #0000ff
         /// players[0]:
         /// 1, "Red", #ff0000
@@ -387,7 +387,7 @@ namespace SuperSnakeCoreTest
                             new CellState(new ColorState(255, 255, 255), true),
                             new CellState(new ColorState(255, 255, 255), true),
                             new CellState(new ColorState(255, 255, 255), true),
-                            new CellState(new ColorState(0, 0, 255), false),
+                            new CellState(new ColorState(255, 255, 255), false),
                             new CellState(new ColorState(255, 255, 255), true),
                         },
                         new List<CellState>
@@ -440,7 +440,7 @@ namespace SuperSnakeCoreTest
         /// xooox #ff0000 #ffffff #ffffff #ffffff #ffff00
         /// oxoox #ffffff #ff0000 #ffffff #ffffff #ffff00
         /// oxooo #ffffff #ff0000 #ffffff #ffffff #ffffff
-        /// xoxxo #ff0000 #ffffff #0000ff #0000ff #ffffff
+        /// xoxxo #ff0000 #ffffff #ffffff #0000ff #ffffff
         /// xxoox #00ff00 #00ff00 #ffffff #ffffff #0000ff
         /// players[0]:
         /// 1, "Red", #ff0000
@@ -485,7 +485,7 @@ namespace SuperSnakeCoreTest
                             new CellState(new ColorState(255, 255, 255), true),
                             new CellState(new ColorState(255, 255, 255), true),
                             new CellState(new ColorState(255, 255, 255), true),
-                            new CellState(new ColorState(0, 0, 255), false),
+                            new CellState(new ColorState(255, 255, 255), false),
                             new CellState(new ColorState(255, 255, 255), true),
                         },
                         new List<CellState>
