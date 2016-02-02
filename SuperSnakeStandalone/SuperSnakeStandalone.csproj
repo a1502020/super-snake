@@ -59,6 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client.cs" />
+    <Compile Include="Clients\RansuchanClient.cs" />
     <Compile Include="DxDLL.cs" />
     <Compile Include="GameStateDrawer.cs" />
     <Compile Include="Key.cs" />

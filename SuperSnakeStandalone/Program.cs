@@ -24,8 +24,22 @@ namespace SuperSnakeStandalone
             DX.DxLib_Init();
             DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 
-            game = new Game(new GameState(testField, testPlayers));
             drawer = new GameStateDrawer();
+            var rnd = new Random();
+
+            // ゲームの初期状態
+            game = new Game(new GameState(testField, testPlayers));
+
+            // クライアント
+            var clients = new List<Client>();
+            for (var i = 0; i < game.State.PlayersCount; ++i)
+            {
+                clients.Add(null);
+            }
+            Parallel.For(0, game.State.PlayersCount, i =>
+            {
+                clients[i] = new Clients.RansuchanClient(rnd);
+            });
 
             // DxLib メインループ
             while (DX.ProcessMessage() == 0)
@@ -35,7 +49,16 @@ namespace SuperSnakeStandalone
 
                 if (key.IsPressed(DX.KEY_INPUT_RETURN))
                 {
-                    game.Step(new List<Action> { Action.Straight, Action.Left, Action.Right, Action.Straight });
+                    var actions = new List<Action>();
+                    for (var i = 0; i < game.State.PlayersCount; ++i)
+                    {
+                        actions.Add(Action.Straight);
+                    }
+                    Parallel.For(0, game.State.PlayersCount, i =>
+                    {
+                        actions[i] = clients[i].Think(game.State, i);
+                    });
+                    game.Step(actions);
                 }
 
                 // 描画
