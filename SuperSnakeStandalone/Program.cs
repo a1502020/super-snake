@@ -29,25 +29,25 @@ namespace SuperSnakeStandalone
             // ゲームの初期状態
             var igsReader = new InitialGameStateReader();
             var initState = igsReader.Read("fields/test.txt");
-            var playerInfos = new List<PlayerInfo>
-            {
-                new PlayerInfo("プレイヤー1", new ColorState(255, 0, 0)),
-                new PlayerInfo("プレイヤー2", new ColorState(0, 0, 255)),
-                new PlayerInfo("プレイヤー3", new ColorState(255, 128, 0)),
-                new PlayerInfo("プレイヤー4", new ColorState(0, 128, 0)),
-            };
-            game = new Game(igsReader.Combine(initState, playerInfos));
 
-            // クライアント
+            // プレイヤー・クライアント
+            var playerInfos = new List<PlayerInfo>();
             var clients = new List<Client>();
-            for (var i = 0; i < game.State.PlayersCount; ++i)
-            {
-                clients.Add(null);
-            }
-            Parallel.For(0, game.State.PlayersCount, i =>
-            {
-                clients[i] = new Clients.RansuchanClient();
-            });
+
+            playerInfos.Add(new PlayerInfo("プレイヤー1", new ColorState(255, 0, 0)));
+            clients.Add(new Clients.RansuchanClient());
+
+            playerInfos.Add(new PlayerInfo("プレイヤー2", new ColorState(0, 0, 255)));
+            clients.Add(new Clients.RansuchanClient());
+            
+            playerInfos.Add(new PlayerInfo("プレイヤー3", new ColorState(255, 128, 0)));
+            clients.Add(new Clients.RansuchanClient());
+            
+            playerInfos.Add(new PlayerInfo("プレイヤー4", new ColorState(0, 128, 0)));
+            clients.Add(new Clients.RansuchanClient());
+
+            // 初期状態でゲームを開始
+            game = new Game(igsReader.Combine(initState, playerInfos));
 
             // DxLib メインループ
             while (DX.ProcessMessage() == 0)
@@ -57,15 +57,8 @@ namespace SuperSnakeStandalone
 
                 if (key.IsPressed(DX.KEY_INPUT_RETURN))
                 {
-                    var actions = new List<Action>();
-                    for (var i = 0; i < game.State.PlayersCount; ++i)
-                    {
-                        actions.Add(Action.Straight);
-                    }
-                    Parallel.For(0, game.State.PlayersCount, i =>
-                    {
-                        actions[i] = clients[i].Think(game.State, i);
-                    });
+                    // ステップ
+                    var actions = decideActions(clients);
                     game.Step(actions);
                 }
 
@@ -77,6 +70,27 @@ namespace SuperSnakeStandalone
 
             // DxLib 終了
             DX.DxLib_End();
+        }
+
+        private List<Action> decideActions(List<Client> clients)
+        {
+            var actions = new List<Action>();
+            for (var i = 0; i < game.State.PlayersCount; ++i)
+            {
+                actions.Add(Action.Straight);
+            }
+            Parallel.For(0, game.State.PlayersCount, i =>
+            {
+                try
+                {
+                    actions[i] = clients[i].Think(game.State, i);
+                }
+                catch (Exception)
+                {
+                    actions[i] = Action.Straight;
+                }
+            });
+            return actions;
         }
 
         private Key key = new Key();
