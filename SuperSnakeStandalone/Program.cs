@@ -35,7 +35,7 @@ namespace SuperSnakeStandalone
             var clients = new List<Client>();
 
             playerInfos.Add(new PlayerInfo("プレイヤー1", new ColorState(255, 0, 0)));
-            clients.Add(new Clients.RansuchanClient());
+            clients.Add(new Clients.KeyboardClient(DX.KEY_INPUT_DOWN, DX.KEY_INPUT_LEFT, DX.KEY_INPUT_RIGHT));
 
             playerInfos.Add(new PlayerInfo("プレイヤー2", new ColorState(0, 0, 255)));
             clients.Add(new Clients.RansuchanClient());
