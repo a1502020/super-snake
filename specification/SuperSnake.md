@@ -158,7 +158,7 @@ H27 部内プロコン(SuperSnake)ルール
                 * `Direction.RightDown`
         * `player.Alive` : プレイヤーが生きているか否か
         * `player.Dead` : プレイヤーが死んでいるか否か
-* `myPlayerNum` : 自分のプレイヤー番号（`Think'の第2引数）
+* `myPlayerNum` : 自分のプレイヤー番号（`Think`の第2引数）
 
 ### 補助メソッド等
 
