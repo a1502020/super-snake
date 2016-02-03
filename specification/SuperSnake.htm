@@ -13,7 +13,7 @@
 <h2 id="概要">概要</h2>
 <p>対戦型パズルゲーム「SuperSnake」のAIを作って対戦します。ゲームは「ステップ」を単位としてターン制で進行します。</p>
 <div class="figure">
-<img src="ss.png" alt="SuperSnakeのイメージ図" />
+<img src="img/ss.png" alt="SuperSnakeのイメージ図" />
 <p class="caption">SuperSnakeのイメージ図</p>
 </div>
 <h2 id="用語など">用語など</h2>
@@ -121,7 +121,125 @@
 </ul>
 <h2 id="順位">順位</h2>
 <p>より長く生き残ったほうが上位となります。同時に死亡した場合は同順位となります。</p>
-<h2 id="クライアントの作成手順">クライアントの作成手順</h2>
-<p>(準備中)</p>
+<h2 id="クライアントの作成">クライアントの作成</h2>
+<h3 id="クラスの作成手順supersnakestandalone">クラスの作成手順(SuperSnakeStandalone)</h3>
+<ol style="list-style-type: decimal">
+<li>プロジェクトを開く
+<ol style="list-style-type: decimal">
+<li>コマンドプロンプトでソースコードを取得したいフォルダに移動します。</li>
+<li>以下のコマンドを入力してソースコードを取得します。
+<ul>
+<li><code>git clone https://github.com/a1502020/super-snake.git</code></li>
+</ul></li>
+<li>取得したフォルダ内の「super-snake.sln」を開きます。
+<ul>
+<li>Visual Studio が起動します。</li>
+</ul></li>
+</ol></li>
+<li>クラスを追加する
+<ol style="list-style-type: decimal">
+<li>ソリューションエクスプローラー上で「SuperSnakeStandalone」内の「Clients」を右クリックし [Add] → [New Item] をクリックします。
+<ul>
+<li>日本語では [追加] → [新しい項目] ？</li>
+<li><img src="img/class.png" alt="クラスの追加" /></li>
+</ul></li>
+<li>C#のクラスを選択し、適当なクラス名を入力してクラスを追加します。
+<ul>
+<li>以下のサンプルコードでは、このクラス名を<code>SampleClient</code>として説明する。</li>
+</ul></li>
+<li>作成したクラスが、クラス<code>Client</code>を継承するようにします。
+<ul>
+<li><code>public class SampleClient : Client</code></li>
+</ul></li>
+</ol></li>
+<li>AIを実装する
+<ol style="list-style-type: decimal">
+<li>抽象メソッド<code>Think</code>を作成します。
+<ul>
+<li><code>public override Action Think(GameState gameState, int myPlayerNum)</code></li>
+<li><code>public override</code>まで書けば IntelliSenseが自動で入力してくれます。</li>
+<li><code>Action</code>という名前が<code>System.Action</code>と被っているため、ファイル先頭のusingに<code>using Action = SuperSnake.Core.Action;</code>を追加すると良いです。</li>
+</ul></li>
+<li><code>Think</code>の内容としてAIを実装します。
+<ul>
+<li><code>Think</code>は「ゲームの状態」と自分の「プレイヤー番号」を受け取り、「行動」を返すメソッドです。</li>
+</ul></li>
+</ol></li>
+<li>デバッグ
+<ul>
+<li>（準備中）</li>
+</ul></li>
+</ol>
+<h3 id="ゲームの状態のアクセス方法">ゲームの状態のアクセス方法</h3>
+<ul>
+<li><code>gameState</code> : ゲームの状態（<code>Think</code>の第1引数）
+<ul>
+<li><code>gameState.Field</code> : フィールドの状態（以下<code>field</code>）
+<ul>
+<li><code>field.Width</code> : フィールドの幅</li>
+<li><code>field.Height</code> : フィールドの高さ</li>
+<li><code>field.Cells[x][y]</code> : 位置<code>(x, y)</code>のセルの状態（以下<code>cell</code>）
+<ul>
+<li><code>cell.Passable</code> : セルが通行可能か否か</li>
+</ul></li>
+</ul></li>
+<li><code>gameState.Players[i]</code> : プレイヤー番号<code>i</code>のプレイヤーの状態（以下<code>player</code>）
+<ul>
+<li><code>player.Position</code> : プレイヤーの位置（以下<code>position</code>）
+<ul>
+<li><code>position.X</code> : X座標</li>
+<li><code>position.Y</code> : Y座標</li>
+</ul></li>
+<li><code>player.Direction</code> : プレイヤーの向き（以下<code>direction</code>）
+<ul>
+<li><code>direction.Value</code> : 以下の8つの値のいずれか
+<ul>
+<li><code>Direction.Right</code></li>
+<li><code>Direction.RightUp</code></li>
+<li><code>Direction.Up</code></li>
+<li><code>Direction.LeftUp</code></li>
+<li><code>Direction.Left</code></li>
+<li><code>Direction.LeftDown</code></li>
+<li><code>Direction.Down</code></li>
+<li><code>Direction.RightDown</code></li>
+</ul></li>
+</ul></li>
+<li><code>player.Alive</code> : プレイヤーが生きているか否か</li>
+<li><code>player.Dead</code> : プレイヤーが死んでいるか否か</li>
+</ul></li>
+</ul></li>
+<li><code>myPlayerNum</code> : 自分のプレイヤー番号（`Think'の第2引数）</li>
+</ul>
+<h3 id="補助メソッド等">補助メソッド等</h3>
+<ul>
+<li><code>PositionState GetNextPosition(PositionState pos, DirectionState dir)</code>
+<ul>
+<li>位置と向きを渡すと、その位置からその向きに1つ進んだ位置を返します。</li>
+</ul></li>
+<li><code>DirectionState GetLeft(DirectionState dir)</code>
+<ul>
+<li>向きを渡すと、その向きから左に45度回転した向きを返します。</li>
+</ul></li>
+<li><code>DirectionState GetRight(DirectionState dir)</code>
+<ul>
+<li>向きを渡すと、その向きから右に45度回転した向きを返します。</li>
+</ul></li>
+<li><code>bool IsIn(FieldState field, PositionState pos)</code>
+<ul>
+<li>フィールドと位置を渡すと、その位置がフィールド内にあるか否かを返します。</li>
+</ul></li>
+<li><code>rnd</code>
+<ul>
+<li>乱数を生成できます。</li>
+<li><code>rnd.Next(3)</code>とすれば、<code>0</code>、<code>1</code>、<code>2</code>のいずれかの値が返されます。</li>
+</ul></li>
+<li>あったほうが良さそうなものがあれば追加します。もしくはプルリクください。</li>
+</ul>
+<h3 id="ai実装のためのポイント">AI実装のためのポイント</h3>
+<ul>
+<li><code>RansuchanClient</code>を参考にしてください。</li>
+<li>無限ループに陥らないように注意してください。</li>
+<li>フィールドの範囲外の位置のセルにアクセスするなどして、例外が発生しないように注意してください。</li>
+</ul>
 </body>
 </html>

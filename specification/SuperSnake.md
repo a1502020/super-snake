@@ -8,7 +8,7 @@ H27 部内プロコン(SuperSnake)ルール
 
 対戦型パズルゲーム「SuperSnake」のAIを作って対戦します。ゲームは「ステップ」を単位としてターン制で進行します。
 
-![SuperSnakeのイメージ図](ss.png)
+![SuperSnakeのイメージ図](img/ss.png)
 
 
 
@@ -106,6 +106,77 @@ H27 部内プロコン(SuperSnake)ルール
 
 より長く生き残ったほうが上位となります。同時に死亡した場合は同順位となります。
 
-## クライアントの作成手順
+## クライアントの作成
 
-(準備中)
+### クラスの作成手順(SuperSnakeStandalone)
+
+1. プロジェクトを開く
+    1. コマンドプロンプトでソースコードを取得したいフォルダに移動します。
+    2.  以下のコマンドを入力してソースコードを取得します。
+        * ` git clone https://github.com/a1502020/super-snake.git `
+    3. 取得したフォルダ内の「super-snake.sln」を開きます。
+        * Visual Studio が起動します。
+2. クラスを追加する
+    1. ソリューションエクスプローラー上で「SuperSnakeStandalone」内の「Clients」を右クリックし [Add] → [New Item] をクリックします。
+        * 日本語では [追加] → [新しい項目] ？
+        * ![クラスの追加](img/class.png)
+    2. C#のクラスを選択し、適当なクラス名を入力してクラスを追加します。
+        * 以下のサンプルコードでは、このクラス名を`SampleClient`として説明する。
+    3. 作成したクラスが、クラス`Client`を継承するようにします。
+        * `public class SampleClient : Client`
+3. AIを実装する
+    1. 抽象メソッド`Think`を作成します。
+        * `public override Action Think(GameState gameState, int myPlayerNum)`
+        * `public override`まで書けば IntelliSenseが自動で入力してくれます。
+        * `Action`という名前が`System.Action`と被っているため、ファイル先頭のusingに`using Action = SuperSnake.Core.Action;`を追加すると良いです。
+    2. `Think`の内容としてAIを実装します。
+        * `Think`は「ゲームの状態」と自分の「プレイヤー番号」を受け取り、「行動」を返すメソッドです。
+4. デバッグ
+    * （準備中）
+
+### ゲームの状態のアクセス方法
+
+* `gameState` : ゲームの状態（`Think`の第1引数）
+    * `gameState.Field` : フィールドの状態（以下`field`）
+        * `field.Width` : フィールドの幅
+        * `field.Height` : フィールドの高さ
+        * `field.Cells[x][y]` : 位置`(x, y)`のセルの状態（以下`cell`）
+            * `cell.Passable` : セルが通行可能か否か
+    * `gameState.Players[i]` : プレイヤー番号`i`のプレイヤーの状態（以下`player`）
+        * `player.Position` : プレイヤーの位置（以下`position`）
+            * `position.X` : X座標
+            * `position.Y` : Y座標
+        * `player.Direction` : プレイヤーの向き（以下`direction`）
+            * `direction.Value` : 以下の8つの値のいずれか
+                * `Direction.Right`
+                * `Direction.RightUp`
+                * `Direction.Up`
+                * `Direction.LeftUp`
+                * `Direction.Left`
+                * `Direction.LeftDown`
+                * `Direction.Down`
+                * `Direction.RightDown`
+        * `player.Alive` : プレイヤーが生きているか否か
+        * `player.Dead` : プレイヤーが死んでいるか否か
+* `myPlayerNum` : 自分のプレイヤー番号（`Think'の第2引数）
+
+### 補助メソッド等
+
+* `PositionState GetNextPosition(PositionState pos, DirectionState dir)`
+    * 位置と向きを渡すと、その位置からその向きに1つ進んだ位置を返します。
+* `DirectionState GetLeft(DirectionState dir)`
+    * 向きを渡すと、その向きから左に45度回転した向きを返します。
+* `DirectionState GetRight(DirectionState dir)`
+    * 向きを渡すと、その向きから右に45度回転した向きを返します。
+* `bool IsIn(FieldState field, PositionState pos)`
+    * フィールドと位置を渡すと、その位置がフィールド内にあるか否かを返します。
+* `rnd`
+    * 乱数を生成できます。
+    * `rnd.Next(3)`とすれば、`0`、`1`、`2`のいずれかの値が返されます。
+* あったほうが良さそうなものがあれば追加します。もしくはプルリクください。
+
+### AI実装のためのポイント
+
+* `RansuchanClient`を参考にしてください。
+* 無限ループに陥らないように注意してください。
+* フィールドの範囲外の位置のセルにアクセスするなどして、例外が発生しないように注意してください。
