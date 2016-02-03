@@ -25,7 +25,6 @@ namespace SuperSnakeStandalone
             DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 
             drawer = new GameStateDrawer();
-            var rnd = new Random();
 
             // ゲームの初期状態
             var igsReader = new InitialGameStateReader();
@@ -47,7 +46,7 @@ namespace SuperSnakeStandalone
             }
             Parallel.For(0, game.State.PlayersCount, i =>
             {
-                clients[i] = new Clients.RansuchanClient(rnd);
+                clients[i] = new Clients.RansuchanClient();
             });
 
             // DxLib メインループ
