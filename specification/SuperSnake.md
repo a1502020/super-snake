@@ -112,8 +112,10 @@ H27 部内プロコン(SuperSnake)ルール
 
 1. プロジェクトを開く
     1. コマンドプロンプトでソースコードを取得したいフォルダに移動します。
-    2.  以下のコマンドを入力してソースコードを取得します。
-        * ` git clone https://github.com/a1502020/super-snake.git `
+    2. 以下のコマンドを入力してソースコードを取得します。
+```
+git clone https://github.com/a1502020/super-snake.git
+```
     3. 取得したフォルダ内の「super-snake.sln」を開きます。
         * Visual Studio が起動します。
 2. クラスを追加する
@@ -121,18 +123,32 @@ H27 部内プロコン(SuperSnake)ルール
         * 日本語では [追加] → [新しい項目] ？
         * ![クラスの追加](img/class.png)
     2. C#のクラスを選択し、適当なクラス名を入力してクラスを追加します。
-        * 以下のサンプルコードでは、このクラス名を`SampleClient`として説明する。
+        * 以下のサンプルコードでは、このクラス名を`SampleClient`として説明します。
     3. 作成したクラスが、クラス`Client`を継承するようにします。
-        * `public class SampleClient : Client`
+```csharp
+public class SampleClient : Client
+```
 3. AIを実装する
-    1. 抽象メソッド`Think`を作成します。
-        * `public override Action Think(GameState gameState, int myPlayerNum)`
+    1. 抽象メソッド`Think`を実装します。
+```csharp
+public override Action Think(GameState gameState, int myPlayerNum)
+```
         * `public override`まで書けば IntelliSenseが自動で入力してくれます。
-        * `Action`という名前が`System.Action`と被っているため、ファイル先頭のusingに`using Action = SuperSnake.Core.Action;`を追加すると良いです。
+        * `Action`という名前が`System.Action`と被っているため、ファイル先頭のusingに
+```csharp
+using Action = SuperSnake.Core.Action;
+```
+  を追加すると良いです。
     2. `Think`の内容としてAIを実装します。
         * `Think`は「ゲームの状態」と自分の「プレイヤー番号」を受け取り、「行動」を返すメソッドです。
 4. デバッグ
-    * （準備中）
+    * 「Program.cs」内で`clients`に追加するクラスを作成したクラスに変更することで、クライアントを動かしてみることができます。
+```csharp
+playerInfos.Add(new PlayerInfo("プレイヤー1", new ColorState(255, 0, 0)));
+clients.Add(new Clients.SampleClient());
+```
+    * 「SuperSnakeStandalone」をスタートアッププロジェクトに設定し、F5キーで実行できます。
+        * Enterキーで1ステップ進みます。
 
 ### ゲームの状態のアクセス方法
 

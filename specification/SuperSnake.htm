@@ -127,10 +127,8 @@
 <li>プロジェクトを開く
 <ol style="list-style-type: decimal">
 <li>コマンドプロンプトでソースコードを取得したいフォルダに移動します。</li>
-<li>以下のコマンドを入力してソースコードを取得します。
-<ul>
-<li><code>git clone https://github.com/a1502020/super-snake.git</code></li>
-</ul></li>
+<li><p>以下のコマンドを入力してソースコードを取得します。</p>
+<pre><code>git clone https://github.com/a1502020/super-snake.git</code></pre></li>
 <li>取得したフォルダ内の「super-snake.sln」を開きます。
 <ul>
 <li>Visual Studio が起動します。</li>
@@ -145,20 +143,20 @@
 </ul></li>
 <li>C#のクラスを選択し、適当なクラス名を入力してクラスを追加します。
 <ul>
-<li>以下のサンプルコードでは、このクラス名を<code>SampleClient</code>として説明する。</li>
+<li>以下のサンプルコードでは、このクラス名を<code>SampleClient</code>として説明します。</li>
 </ul></li>
-<li>作成したクラスが、クラス<code>Client</code>を継承するようにします。
-<ul>
-<li><code>public class SampleClient : Client</code></li>
-</ul></li>
+<li><p>作成したクラスが、クラス<code>Client</code>を継承するようにします。</p>
+<pre class="csharp"><code>public class SampleClient : Client</code></pre></li>
 </ol></li>
 <li>AIを実装する
 <ol style="list-style-type: decimal">
-<li>抽象メソッド<code>Think</code>を作成します。
+<li><p>抽象メソッド<code>Think</code>を実装します。</p>
+<pre class="csharp"><code>public override Action Think(GameState gameState, int myPlayerNum)</code></pre>
 <ul>
-<li><code>public override Action Think(GameState gameState, int myPlayerNum)</code></li>
 <li><code>public override</code>まで書けば IntelliSenseが自動で入力してくれます。</li>
-<li><code>Action</code>という名前が<code>System.Action</code>と被っているため、ファイル先頭のusingに<code>using Action = SuperSnake.Core.Action;</code>を追加すると良いです。</li>
+<li><p><code>Action</code>という名前が<code>System.Action</code>と被っているため、ファイル先頭のusingに</p>
+<pre class="csharp"><code>using Action = SuperSnake.Core.Action;</code></pre>
+を追加すると良いです。</li>
 </ul></li>
 <li><code>Think</code>の内容としてAIを実装します。
 <ul>
@@ -167,7 +165,13 @@
 </ol></li>
 <li>デバッグ
 <ul>
-<li>（準備中）</li>
+<li><p>「Program.cs」内で<code>clients</code>に追加するクラスを作成したクラスに変更することで、クライアントを動かしてみることができます。</p>
+<pre class="csharp"><code>playerInfos.Add(new PlayerInfo(&quot;プレイヤー1&quot;, new ColorState(255, 0, 0)));
+clients.Add(new Clients.SampleClient());</code></pre></li>
+<li>「SuperSnakeStandalone」をスタートアッププロジェクトに設定し、F5キーで実行できます。
+<ul>
+<li>Enterキーで1ステップ進みます。</li>
+</ul></li>
 </ul></li>
 </ol>
 <h3 id="ゲームの状態のアクセス方法">ゲームの状態のアクセス方法</h3>
