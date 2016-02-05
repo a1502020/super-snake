@@ -10,6 +10,50 @@ namespace SuperSnake.Core
     {
         public Direction Value { get; private set; }
 
+        /// <summary>
+        /// 右に４５度回転した向き
+        /// </summary>
+        public DirectionState Right
+        {
+            get
+            {
+                switch (Value)
+                {
+                    case Direction.Right: return new DirectionState(Direction.RightDown);
+                    case Direction.RightUp: return new DirectionState(Direction.Right);
+                    case Direction.Up: return new DirectionState(Direction.RightUp);
+                    case Direction.LeftUp: return new DirectionState(Direction.Up);
+                    case Direction.Left: return new DirectionState(Direction.LeftUp);
+                    case Direction.LeftDown: return new DirectionState(Direction.Left);
+                    case Direction.Down: return new DirectionState(Direction.LeftDown);
+                    case Direction.RightDown: return new DirectionState(Direction.Down);
+                }
+                throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        /// 左に４５度回転した向き
+        /// </summary>
+        public DirectionState Left
+        {
+            get
+            {
+                switch (Value)
+                {
+                    case Direction.Right: return new DirectionState(Direction.RightUp);
+                    case Direction.RightUp: return new DirectionState(Direction.Up);
+                    case Direction.Up: return new DirectionState(Direction.LeftUp);
+                    case Direction.LeftUp: return new DirectionState(Direction.Left);
+                    case Direction.Left: return new DirectionState(Direction.LeftDown);
+                    case Direction.LeftDown: return new DirectionState(Direction.Down);
+                    case Direction.Down: return new DirectionState(Direction.RightDown);
+                    case Direction.RightDown: return new DirectionState(Direction.Right);
+                }
+                throw new InvalidOperationException();
+            }
+        }
+
         public DirectionState(Direction value)
         {
             this.Value = value;
