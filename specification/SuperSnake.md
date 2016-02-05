@@ -89,12 +89,12 @@ H27 部内プロコン(SuperSnake)ルール
 サーバーで行われるステップ処理の内容は以下のとおりです。
 
 1. （移動フェーズ）生きているすべてのプレイヤーについて、
-    1. プレイヤーの行動に応じてプレイヤーの向きを変えます。直進ならそのまま、右折なら右に45度回転、左折なら左に45度回転です。
-    2. プレイヤーの向いている方向にプレイヤーの位置を1つ移動します。
+  1. プレイヤーの行動に応じてプレイヤーの向きを変えます。直進ならそのまま、右折なら右に45度回転、左折なら左に45度回転です。
+  2. プレイヤーの向いている方向にプレイヤーの位置を1つ移動します。
 2. （死亡判定フェーズ）生きているすべてのプレイヤーについて、以下のいずれかの条件を満たすときそのプレイヤーは死亡します。 
-    * プレイヤーの位置がフィールド外
-    * プレイヤーの位置のセルが通行不可能
-    * 同じ位置に他のプレイヤー（生死を問わない）がいる
+  * プレイヤーの位置がフィールド外
+  * プレイヤーの位置のセルが通行不可能
+  * 同じ位置に他のプレイヤー（生死を問わない）がいる
 3. すべてのプレイヤー（生死を問わない）について、プレイヤーの位置のセルを通行可能でなくします。
 
 ゲームの終了条件は、以下のいずれかの条件を満たすことです。
@@ -111,84 +111,86 @@ H27 部内プロコン(SuperSnake)ルール
 ### クラスの作成手順(SuperSnakeStandalone)
 
 1. プロジェクトを開く
-    1. コマンドプロンプトでソースコードを取得したいフォルダに移動します。
-    2. 以下のコマンドを入力してソースコードを取得します。
-```
-git clone https://github.com/a1502020/super-snake.git
-```
-    3. 取得したフォルダ内の「super-snake.sln」を開きます。
-        * Visual Studio が起動します。
+  1. コマンドプロンプトでソースコードを取得したいフォルダに移動します。
+  2. GitHubからソースコードを取得します。
+    * 以下のコマンドを入力してソースコードを取得します。
+    ```
+    git clone https://github.com/a1502020/super-snake.git
+    ```
+  3. 取得したフォルダ内の「super-snake.sln」を開きます。
+    * Visual Studio が起動します。
 2. クラスを追加する
-    1. ソリューションエクスプローラー上で「SuperSnakeStandalone」内の「Clients」を右クリックし [Add] → [New Item] をクリックします。
-        * 日本語では [追加] → [新しい項目] ？
-        * ![クラスの追加](img/class.png)
-    2. C#のクラスを選択し、適当なクラス名を入力してクラスを追加します。
-        * 以下のサンプルコードでは、このクラス名を`SampleClient`として説明します。
-    3. 作成したクラスが、クラス`Client`を継承するようにします。
-```csharp
-public class SampleClient : Client
-```
+  1. ソリューションエクスプローラー上で「SuperSnakeStandalone」内の「Clients」を右クリックし [Add] → [New Item] をクリックします。
+    * 日本語では [追加] → [新しい項目] ？
+    ![クラスの追加](img/class.png)
+  2. C#のクラスを選択し、適当なクラス名を入力してクラスを追加します。
+    * 以下のサンプルコードでは、このクラス名を`SampleClient`として説明します。
+  3. 作成したクラスが、クラス`Client`を継承するようにします。
+    * コード例
+    ```csharp
+    public class SampleClient : Client
+    ```
 3. AIを実装する
-    1. 抽象メソッド`Think`を実装します。
-```csharp
-public override Action Think(GameState gameState, int myPlayerNum)
-```
-        * `public override`まで書けば IntelliSenseが自動で入力してくれます。
-        * `Action`という名前が`System.Action`と被っているため、ファイル先頭のusingに
-```csharp
-using Action = SuperSnake.Core.Action;
-```
-  を追加すると良いです。
-    2. `Think`の内容としてAIを実装します。
-        * `Think`は「ゲームの状態」と自分の「プレイヤー番号」を受け取り、「行動」を返すメソッドです。
+  1. 抽象メソッド`Think`を実装します。
+    * `public override`まで書けば IntelliSenseが自動で入力してくれます。
+    ```csharp
+    public override Action Think(GameState gameState, int myPlayerNum)
+    ```
+    * `Action`という名前が`System.Action`と被っているため、ファイル先頭のusingに以下の行を追加すると良いです。
+    ```csharp
+    using Action = SuperSnake.Core.Action;
+    ```
+  2. `Think`の内容としてAIを実装します。
+    * `Think`は「ゲームの状態」と自分の「プレイヤー番号」を受け取り、「行動」を返すメソッドです。
 4. デバッグ
-    * 「Program.cs」内で`clients`に追加するクラスを作成したクラスに変更することで、クライアントを動かしてみることができます。
-```csharp
-playerInfos.Add(new PlayerInfo("プレイヤー1", new ColorState(255, 0, 0)));
-clients.Add(new Clients.SampleClient());
-```
-    * 「SuperSnakeStandalone」をスタートアッププロジェクトに設定し、F5キーで実行できます。
-        * Enterキーで1ステップ進みます。
+  1. 「Program.cs」内で`clients`に追加するクラスを作成したクラスに変更することで、クライアントを動かしてみることができます。
+    * コード例
+    ```csharp
+    playerInfos.Add(new PlayerInfo("プレイヤー1", new ColorState(255, 0, 0)));
+    clients.Add(new Clients.SampleClient());
+    ```
+  2. 「SuperSnakeStandalone」をスタートアッププロジェクトに設定し、F5キーで実行できます。
+    * Enterキーで1ステップ進みます。
 
 ### ゲームの状態のアクセス方法
 
 * `gameState` : ゲームの状態（`Think`の第1引数）
-    * `gameState.Field` : フィールドの状態（以下`field`）
-        * `field.Width` : フィールドの幅
-        * `field.Height` : フィールドの高さ
-        * `field.Cells[x][y]` : 位置`(x, y)`のセルの状態（以下`cell`）
-            * `cell.Passable` : セルが通行可能か否か
-    * `gameState.Players[i]` : プレイヤー番号`i`のプレイヤーの状態（以下`player`）
-        * `player.Position` : プレイヤーの位置（以下`position`）
-            * `position.X` : X座標
-            * `position.Y` : Y座標
-        * `player.Direction` : プレイヤーの向き（以下`direction`）
-            * `direction.Value` : 以下の8つの値のいずれか
-                * `Direction.Right`
-                * `Direction.RightUp`
-                * `Direction.Up`
-                * `Direction.LeftUp`
-                * `Direction.Left`
-                * `Direction.LeftDown`
-                * `Direction.Down`
-                * `Direction.RightDown`
-        * `player.Alive` : プレイヤーが生きているか否か
-        * `player.Dead` : プレイヤーが死んでいるか否か
+  * `gameState.Field` : フィールドの状態（以下`field`）
+    * `field.Width` : フィールドの幅
+    * `field.Height` : フィールドの高さ
+    * `field.Cells[x][y]` : 位置`(x, y)`のセルの状態（以下`cell`）
+      * `cell.Passable` : セルが通行可能か否か
+  * `gameState.Players[i]` : プレイヤー番号`i`のプレイヤーの状態（以下`player`）
+    * `player.Position` : プレイヤーの位置（以下`position`）
+      * `position.X` : X座標
+      * `position.Y` : Y座標
+    * `player.Direction` : プレイヤーの向き（以下`direction`）
+      * `direction.Value` : 以下の8つの値のいずれか
+        * `Direction.Right`
+        * `Direction.RightUp`
+        * `Direction.Up`
+        * `Direction.LeftUp`
+        * `Direction.Left`
+        * `Direction.LeftDown`
+        * `Direction.Down`
+        * `Direction.RightDown`
+    * `player.Alive` : プレイヤーが生きているか否か
+    * `player.Dead` : プレイヤーが死んでいるか否か
 * `myPlayerNum` : 自分のプレイヤー番号（`Think`の第2引数）
 
 ### 補助メソッド等
 
 * `PositionState GetNextPosition(PositionState pos, DirectionState dir)`
-    * 位置と向きを渡すと、その位置からその向きに1つ進んだ位置を返します。
+  * 位置と向きを渡すと、その位置からその向きに1つ進んだ位置を返します。
 * `DirectionState GetLeft(DirectionState dir)`
-    * 向きを渡すと、その向きから左に45度回転した向きを返します。
+  * 向きを渡すと、その向きから左に45度回転した向きを返します。
 * `DirectionState GetRight(DirectionState dir)`
-    * 向きを渡すと、その向きから右に45度回転した向きを返します。
+  * 向きを渡すと、その向きから右に45度回転した向きを返します。
 * `bool IsIn(FieldState field, PositionState pos)`
-    * フィールドと位置を渡すと、その位置がフィールド内にあるか否かを返します。
+  * フィールドと位置を渡すと、その位置がフィールド内にあるか否かを返します。
 * `Random rnd`
-    * 乱数を生成できます。
-    * `rnd.Next(3)`とすれば、`0`、`1`、`2`のいずれかの値が返されます。
+  * 乱数を生成できます。
+  * `rnd.Next(3)`とすれば、`0`、`1`、`2`のいずれかの値が返されます。
 * あったほうが良さそうなものがあれば追加します。もしくはプルリクください。
 
 ### AI実装のためのポイント
