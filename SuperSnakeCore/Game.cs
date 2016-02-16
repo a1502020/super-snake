@@ -35,6 +35,13 @@ namespace SuperSnake.Core
 
             // すべてのプレイヤーの位置のセルを通行可能でなくする
             makeCellsUnderPlayersNotPassable();
+
+            // ターン数
+            State = new GameState(
+                State.Field,
+                State.Players,
+                State.Turn + 1
+            );
         }
 
         private void stepMove(IList<Action> actions)

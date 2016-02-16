@@ -41,6 +41,7 @@ namespace SuperSnake.Core
                     return false;
                 }
             }
+            if (!this.Turn.Equals(other.Turn)) return false;
             return true;
         }
 
