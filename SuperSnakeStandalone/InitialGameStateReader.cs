@@ -103,7 +103,7 @@ namespace SuperSnakeStandalone
                 players.Add(new PlayerState(i, info.Name, info.Color, init.Position, init.Direction, true));
             }
 
-            return new GameState(gameState.Field, players);
+            return new GameState(gameState.Field, players, 0);
         }
     }
 }
