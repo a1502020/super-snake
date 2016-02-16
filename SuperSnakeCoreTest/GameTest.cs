@@ -43,6 +43,7 @@ namespace SuperSnakeCoreTest
         }
 
         /// <summary>
+        /// turn: 0
         /// field:
         /// "field1"
         /// xooox #ffffff #ffffff #ffffff #ffffff #ffffff
@@ -134,13 +135,15 @@ namespace SuperSnakeCoreTest
                         4, "Green", new ColorState(0, 255, 0),
                         new PositionState(0, 4), new DirectionState(Direction.RightUp),
                         true),
-                }
+                },
                 #endregion
+                0
             );
         }
 
         /// <summary>
         /// (GameState1からSSLR(1:直進(S)、2:直進、3:左折(L)、4：右折(R)))
+        /// turn: 1
         /// field:
         /// "field1"
         /// xooox #ff0000 #ffffff #ffffff #ffffff #ffff00
@@ -232,13 +235,15 @@ namespace SuperSnakeCoreTest
                         4, "Green", new ColorState(0, 255, 0),
                         new PositionState(1, 4), new DirectionState(Direction.Right),
                         true),
-                }
+                },
                 #endregion
+                1
             );
         }
 
         /// <summary>
         /// (GameState1aからRLLL)
+        /// turn: 2
         /// field:
         /// "field1"
         /// xooox #ff0000 #ffffff #ffffff #ffffff #ffff00
@@ -312,7 +317,7 @@ namespace SuperSnakeCoreTest
                     #endregion
                 ),
                 #region players
- new List<PlayerState>
+                new List<PlayerState>
                 {
                     new PlayerState(
                         1, "Red", new ColorState(255, 0, 0),
@@ -330,13 +335,15 @@ namespace SuperSnakeCoreTest
                         4, "Green", new ColorState(0, 255, 0),
                         new PositionState(2, 3), new DirectionState(Direction.RightUp),
                         false),
-                }
-            #endregion
+                },
+                #endregion
+                2
             );
         }
 
         /// <summary>
         /// (GameState1bからRSLR)
+        /// turn: 3
         /// field:
         /// "field1"
         /// xooox #ff0000 #ffffff #ffffff #ffffff #ffff00
@@ -428,13 +435,15 @@ namespace SuperSnakeCoreTest
                         4, "Green", new ColorState(0, 255, 0),
                         new PositionState(2, 3), new DirectionState(Direction.RightUp),
                         false),
-                }
+                },
                 #endregion
+                3
             );
         }
 
         /// <summary>
         /// (GameState1cからLSLR)
+        /// turn: 4
         /// field:
         /// "field1"
         /// xooox #ff0000 #ffffff #ffffff #ffffff #ffff00
@@ -526,8 +535,9 @@ namespace SuperSnakeCoreTest
                         4, "Green", new ColorState(0, 255, 0),
                         new PositionState(2, 3), new DirectionState(Direction.RightUp),
                         false),
-                }
+                },
                 #endregion
+                4
             );
         }
     }

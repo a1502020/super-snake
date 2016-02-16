@@ -35,6 +35,13 @@ namespace SuperSnake.Core
 
             // すべてのプレイヤーの位置のセルを通行可能でなくする
             makeCellsUnderPlayersNotPassable();
+
+            // ターン数
+            State = new GameState(
+                State.Field,
+                State.Players,
+                State.Turn + 1
+            );
         }
 
         private void stepMove(IList<Action> actions)
@@ -55,7 +62,8 @@ namespace SuperSnake.Core
                     State.Field.Name,
                     cells.Select(row => (IList<CellState>)row.AsReadOnly()).ToList().AsReadOnly()
                 ),
-                State.Players);
+                State.Players,
+                State.Turn);
         }
 
         private void stepMovePlayer(int playerNumber, Action action)
@@ -110,7 +118,7 @@ namespace SuperSnake.Core
             players[playerNumber] = new PlayerState(
                 player.Number, player.Name, player.Color,
                 pos, new DirectionState(dir), player.Alive);
-            State = new GameState(State.Field, players.AsReadOnly());
+            State = new GameState(State.Field, players.AsReadOnly(), State.Turn);
         }
 
         private void stepJudge()
@@ -128,7 +136,7 @@ namespace SuperSnake.Core
                     players[i] = new PlayerState(
                         player.Number, player.Name, player.Color,
                         player.Position, player.Direction, false);
-                    State = new GameState(State.Field, players.AsReadOnly());
+                    State = new GameState(State.Field, players.AsReadOnly(), State.Turn);
                 }
             }
         }
@@ -171,7 +179,8 @@ namespace SuperSnake.Core
                     State.Field.Name,
                     cells.Select(row => (IList<CellState>)row.AsReadOnly()).ToList()
                 ),
-                State.Players);
+                State.Players,
+                State.Turn);
         }
 
         private bool isInField(PositionState pos)

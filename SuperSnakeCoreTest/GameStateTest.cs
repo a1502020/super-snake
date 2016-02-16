@@ -21,11 +21,14 @@ namespace SuperSnakeCoreTest
             Assert.IsFalse(CreateDummyGameState1().Equals(CreateDummyGameState1b()));
             Assert.IsFalse(CreateDummyGameState1() == CreateDummyGameState1c());
             Assert.IsFalse(CreateDummyGameState1().Equals(CreateDummyGameState1c()));
+            Assert.IsFalse(CreateDummyGameState1() == CreateDummyGameState1d());
+            Assert.IsFalse(CreateDummyGameState1().Equals(CreateDummyGameState1d()));
         }
 
         [TestMethod]
         public void 各プロパティの値はコンストラクタのパラメータに等しい()
         {
+            // turn: 0
             // field:
             // "field1", 2x2
             // xo #ff0000 #000000
@@ -38,7 +41,9 @@ namespace SuperSnakeCoreTest
             Assert.IsTrue(g1.PlayersCount == 1);
             Assert.IsTrue(g1.Players.Count == g1.PlayersCount);
             Assert.IsTrue(g1.Players[0] == PlayerStateTest.CreateDummyPlayerState1());
+            Assert.IsTrue(g1.Turn == 0);
 
+            // turn: 123
             // field:
             // "field4", 12x12
             // oooooooooooo #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff
@@ -65,9 +70,11 @@ namespace SuperSnakeCoreTest
             Assert.IsTrue(g2.Players.Count == g2.PlayersCount);
             Assert.IsTrue(g2.Players[0] == PlayerStateTest.CreateDummyPlayerState1());
             Assert.IsTrue(g2.Players[1] == PlayerStateTest.CreateDummyPlayerState2());
+            Assert.IsTrue(g2.Turn == 123);
         }
 
         /// <summary>
+        /// turn: 0
         /// field:
         /// "field1", 2x2
         /// xo #ff0000 #000000
@@ -84,12 +91,14 @@ namespace SuperSnakeCoreTest
                 new List<PlayerState>
                 {
                     PlayerStateTest.CreateDummyPlayerState1()
-                }
-                );
+                },
+                0
+            );
         }
 
         /// <summary>
         /// ("field1"とフィールドが異なる)
+        /// turn: 0
         /// field:
         /// "field1a", 2x2
         /// xo #ff0000 #000000
@@ -106,12 +115,14 @@ namespace SuperSnakeCoreTest
                 new List<PlayerState>
                 {
                     PlayerStateTest.CreateDummyPlayerState1()
-                }
-                );
+                },
+                0
+            );
         }
 
         /// <summary>
         /// ("field1"とplayers[0]が異なる)
+        /// turn: 0
         /// field:
         /// "field1", 2x2
         /// xo #ff0000 #000000
@@ -128,12 +139,14 @@ namespace SuperSnakeCoreTest
                 new List<PlayerState>
                 {
                     PlayerStateTest.CreateDummyPlayerState1a()
-                }
-                );
+                },
+                0
+            );
         }
 
         /// <summary>
         /// ("field1"とプレイヤー数が異なる)
+        /// turn: 0
         /// field:
         /// "field1", 2x2
         /// xo #ff0000 #000000
@@ -154,11 +167,37 @@ namespace SuperSnakeCoreTest
                 {
                     PlayerStateTest.CreateDummyPlayerState1(),
                     PlayerStateTest.CreateDummyPlayerState1a(),
-                }
-                );
+                },
+                0
+            );
         }
 
         /// <summary>
+        /// ("field1"とターン数が異なる)
+        /// turn: 1
+        /// field:
+        /// "field1", 2x2
+        /// xo #ff0000 #000000
+        /// ox #000000 #0000ff
+        /// players[0]:
+        /// 1, "player1", #ff0000
+        /// (1, 1), Right, Alive
+        /// </summary>
+        /// <returns></returns>
+        public static GameState CreateDummyGameState1d()
+        {
+            return new GameState(
+                FieldStateTest.CreateDummyFieldState1(),
+                new List<PlayerState>
+                {
+                    PlayerStateTest.CreateDummyPlayerState1()
+                },
+                1
+            );
+        }
+
+        /// <summary>
+        /// turn: 123
         /// field:
         /// "field4", 12x12
         /// oooooooooooo #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff
@@ -189,8 +228,9 @@ namespace SuperSnakeCoreTest
                 {
                     PlayerStateTest.CreateDummyPlayerState1(),
                     PlayerStateTest.CreateDummyPlayerState2(),
-                }
-                );
+                },
+                123
+            );
         }
     }
 }

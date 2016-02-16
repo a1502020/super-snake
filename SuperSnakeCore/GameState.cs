@@ -15,11 +15,13 @@ namespace SuperSnake.Core
         public FieldState Field { get; private set; }
         public int PlayersCount { get { return Players.Count; } }
         public IList<PlayerState> Players { get; private set; }
+        public int Turn { get; private set; }
 
-        public GameState(FieldState field, IList<PlayerState> players)
+        public GameState(FieldState field, IList<PlayerState> players, int turn)
         {
             this.Field = field;
             this.Players = players.ToList().AsReadOnly();
+            this.Turn = turn;
         }
 
         public override bool Equals(object obj)
@@ -39,6 +41,7 @@ namespace SuperSnake.Core
                     return false;
                 }
             }
+            if (!this.Turn.Equals(other.Turn)) return false;
             return true;
         }
 
