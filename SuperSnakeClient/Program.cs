@@ -1,6 +1,7 @@
 ﻿using DxLibDLL;
 using SuperSnake.Core;
-using SuperSnakeStandalone;
+using SuperSnake.Net;
+using SuperSnake.Net.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SuperSnake.Net.Client
+namespace SuperSnakeClient
 {
     public class Program
     {
@@ -44,7 +45,7 @@ namespace SuperSnake.Net.Client
             var drawer = new GameStateDrawer();
 
             // クライアント
-            var client = new SuperSnakeStandalone.Clients.KeyboardClient(DX.KEY_INPUT_LEFT, DX.KEY_INPUT_DOWN, DX.KEY_INPUT_RIGHT);
+            var client = new Clients.KeyboardClient(DX.KEY_INPUT_LEFT, DX.KEY_INPUT_DOWN, DX.KEY_INPUT_RIGHT);
             
             // ゲームの状態
             GameState state = null;

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSnakeCore", "SuperSnakeCore\SuperSnakeCore.csproj", "{2ED974FF-E3C5-4D35-B8BD-26F85B79D5A6}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSnakeStandalone", "SuperSnakeStandalone\SuperSnakeStandalone.csproj", "{4D955EFD-3F8B-4B70-A492-4C57A4538D80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSnakeClient", "SuperSnakeClient\SuperSnakeClient.csproj", "{7E6B73C3-7B6B-4B4C-BB61-6CCE1F4176C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSnakeNetCore", "SuperSnakeNetCore\SuperSnakeNetCore.csproj", "{715949C6-1ED6-4A82-95F8-349E75BA4F6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSnakeNetCoreDxLib", "SuperSnakeNetCoreDxLib\SuperSnakeNetCoreDxLib.csproj", "{ED9F0672-955C-4324-BDCB-00E479BF54A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{7E6B73C3-7B6B-4B4C-BB61-6CCE1F4176C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E6B73C3-7B6B-4B4C-BB61-6CCE1F4176C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E6B73C3-7B6B-4B4C-BB61-6CCE1F4176C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{715949C6-1ED6-4A82-95F8-349E75BA4F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{715949C6-1ED6-4A82-95F8-349E75BA4F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{715949C6-1ED6-4A82-95F8-349E75BA4F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{715949C6-1ED6-4A82-95F8-349E75BA4F6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED9F0672-955C-4324-BDCB-00E479BF54A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED9F0672-955C-4324-BDCB-00E479BF54A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED9F0672-955C-4324-BDCB-00E479BF54A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED9F0672-955C-4324-BDCB-00E479BF54A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
