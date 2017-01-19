@@ -7,7 +7,7 @@
     <ProjectGuid>{7E6B73C3-7B6B-4B4C-BB61-6CCE1F4176C1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SuperSnakeClient</RootNamespace>
+    <RootNamespace>SuperSnake.Net.Client</RootNamespace>
     <AssemblyName>SuperSnakeClient</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
