@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SuperSnakeStandalone
+namespace SuperSnake.Util
 {
     public class Key
     {

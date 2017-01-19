@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SuperSnake.Net.Core
+namespace SuperSnake.Util
 {
     public class Size
     {

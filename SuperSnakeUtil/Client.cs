@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Action = SuperSnake.Core.Action;
 
-namespace SuperSnakeStandalone
+namespace SuperSnake.Util
 {
     public abstract class Client
     {

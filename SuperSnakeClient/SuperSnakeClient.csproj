@@ -44,13 +44,13 @@
       <Project>{2ed974ff-e3c5-4d35-b8bd-26f85b79d5a6}</Project>
       <Name>SuperSnakeCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SuperSnakeNetCoreDxLib\SuperSnakeNetCoreDxLib.csproj">
-      <Project>{ed9f0672-955c-4324-bdcb-00e479bf54a2}</Project>
-      <Name>SuperSnakeNetCoreDxLib</Name>
+    <ProjectReference Include="..\SuperSnakeDxLibUtil\SuperSnakeDxLibUtil.csproj">
+      <Project>{efb508c4-a365-4367-a5b8-a467c5e30ba8}</Project>
+      <Name>SuperSnakeDxLibUtil</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SuperSnakeNetCore\SuperSnakeNetCore.csproj">
-      <Project>{715949c6-1ed6-4a82-95f8-349e75ba4f6e}</Project>
-      <Name>SuperSnakeNetCore</Name>
+    <ProjectReference Include="..\SuperSnakeUtil\SuperSnakeUtil.csproj">
+      <Project>{d2588310-33eb-4f20-83b4-13503dc2286b}</Project>
+      <Name>SuperSnakeUtil</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

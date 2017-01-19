@@ -1,5 +1,5 @@
 ﻿using SuperSnake.Core;
-using SuperSnake.Net.Core;
+using SuperSnake.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;

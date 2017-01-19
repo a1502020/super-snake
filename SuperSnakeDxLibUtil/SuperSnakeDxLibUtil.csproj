@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{715949C6-1ED6-4A82-95F8-349E75BA4F6E}</ProjectGuid>
+    <ProjectGuid>{EFB508C4-A365-4367-A5B8-A467C5E30BA8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SuperSnake.Net.Core</RootNamespace>
-    <AssemblyName>SuperSnakeNetCore</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>SuperSnakeDxLibUtil</RootNamespace>
+    <AssemblyName>SuperSnakeDxLibUtil</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,13 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
+    <Compile Include="DxDLL.cs" />
+    <Compile Include="GameStateDrawer.cs" />
+    <Compile Include="Key.cs" />
+    <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Size.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SuperSnakeCore\SuperSnakeCore.csproj">
       <Project>{2ed974ff-e3c5-4d35-b8bd-26f85b79d5a6}</Project>
       <Name>SuperSnakeCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SuperSnakeUtil\SuperSnakeUtil.csproj">
+      <Project>{d2588310-33eb-4f20-83b4-13503dc2286b}</Project>
+      <Name>SuperSnakeUtil</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
