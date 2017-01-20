@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSnakeCore", "SuperSnakeCore\SuperSnakeCore.csproj", "{2ED974FF-E3C5-4D35-B8BD-26F85B79D5A6}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSnakeUtil", "SuperSnakeUtil\SuperSnakeUtil.csproj", "{D2588310-33EB-4F20-83B4-13503DC2286B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSnakeDxLibUtil", "SuperSnakeDxLibUtil\SuperSnakeDxLibUtil.csproj", "{EFB508C4-A365-4367-A5B8-A467C5E30BA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSnakeServer", "SuperSnakeServer\SuperSnakeServer.csproj", "{24BEF554-C441-4B6E-B9D6-64C3CAF12D90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{EFB508C4-A365-4367-A5B8-A467C5E30BA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFB508C4-A365-4367-A5B8-A467C5E30BA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFB508C4-A365-4367-A5B8-A467C5E30BA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24BEF554-C441-4B6E-B9D6-64C3CAF12D90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24BEF554-C441-4B6E-B9D6-64C3CAF12D90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24BEF554-C441-4B6E-B9D6-64C3CAF12D90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24BEF554-C441-4B6E-B9D6-64C3CAF12D90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -38,6 +38,7 @@ namespace SuperSnakeClient
 
             // DxLib 初期化
             DX.ChangeWindowMode(DX.TRUE);
+            DX.SetDoubleStartValidFlag(DX.TRUE);
             DX.DxLib_Init();
             DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 

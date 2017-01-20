@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SuperSnake.Core;
 
-namespace SuperSnakeStandalone
+namespace SuperSnake.Util
 {
     public class InitialGameState
     {
