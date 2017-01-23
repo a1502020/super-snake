@@ -48,7 +48,7 @@ namespace SuperSnakeStandalone
             clients.Add(new Clients.RansuchanClient());
 
             // 初期状態でゲームを開始
-            game = new Game(igsReader.Combine(initState, playerInfos));
+            game = new Game(InitialGameStateReader.Combine(initState, playerInfos));
 
             // DxLib メインループ
             while (DX.ProcessMessage() == 0)

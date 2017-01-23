@@ -44,5 +44,13 @@ namespace SuperSnakeClient.Clients
             // ランダムで決定
             return list[rnd.Next(list.Count)];
         }
+
+        public override string Name
+        {
+            get
+            {
+                return "乱数ちゃん";
+            }
+        }
     }
 }

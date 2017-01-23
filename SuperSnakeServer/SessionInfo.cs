@@ -10,10 +10,9 @@ namespace SuperSnakeServer
 {
     public class SessionInfo
     {
-        public SessionInfo(WebSocketSession s, int playerNum)
+        public SessionInfo(WebSocketSession s)
         {
             this.Session = s;
-            this.PlayerNum = playerNum;
             this.TaskSendGameState = null;
         }
 
@@ -23,9 +22,14 @@ namespace SuperSnakeServer
         public WebSocketSession Session { get; set; }
 
         /// <summary>
-        /// プレイヤー番号
+        /// プレイヤー名
         /// </summary>
-        public int PlayerNum { get; set; }
+        public string PlayerName { get; set; }
+
+        /// <summary>
+        /// プレイヤーの色
+        /// </summary>
+        public ColorState PlayerColor { get; set; }
 
         /// <summary>
         /// ゲームの状態送信タスク

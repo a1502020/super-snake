@@ -20,6 +20,14 @@ namespace SuperSnake.Util
         public abstract Action Think(GameState gameState, int myPlayerNum);
 
         /// <summary>
+        /// プレイヤーの名前
+        /// </summary>
+        public virtual string Name
+        {
+            get { return "プレイヤー"; }
+        }
+
+        /// <summary>
         /// 与えられた位置から与えられた方向に進んだ次の位置を求める。
         /// 例えば (1, 2), Right を渡すと (2, 2) を返す。
         /// </summary>

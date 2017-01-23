@@ -29,6 +29,14 @@ namespace SuperSnakeClient.Clients
             }
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "手動プレイヤー";
+            }
+        }
+
         private int keys, keyl, keyr;
     }
 }

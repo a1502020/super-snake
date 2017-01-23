@@ -88,7 +88,7 @@ namespace SuperSnake.Util
             }
         }
 
-        public GameState Combine(InitialGameState gameState, IList<PlayerInfo> playerInfos)
+        public static GameState Combine(InitialGameState gameState, IList<PlayerInfo> playerInfos)
         {
             if (playerInfos.Count > gameState.PlayersCount)
             {
