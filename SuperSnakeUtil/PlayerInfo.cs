@@ -10,12 +10,10 @@ namespace SuperSnake.Util
     public class PlayerInfo
     {
         public string Name { get; private set; }
-        public ColorState Color { get; private set; }
 
-        public PlayerInfo(string name, ColorState color)
+        public PlayerInfo(string name)
         {
             this.Name = name;
-            this.Color = color;
         }
 
         public override bool Equals(object obj)
@@ -26,7 +24,7 @@ namespace SuperSnake.Util
         public bool Equals(PlayerInfo other)
         {
             if ((object)other == null) return false;
-            return this.Name.Equals(other.Name) && this.Color.Equals(other.Color);
+            return this.Name.Equals(other.Name);
         }
 
         public static bool operator ==(PlayerInfo l, PlayerInfo r)
@@ -41,7 +39,7 @@ namespace SuperSnake.Util
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode() ^ Color.GetHashCode();
+            return Name.GetHashCode();
         }
     }
 }

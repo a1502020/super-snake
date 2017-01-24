@@ -32,13 +32,6 @@ namespace SuperSnakeServer
         private WebSocketServer server;
         private InitialGameState initState;
         private List<SessionInfo> sessions = new List<SessionInfo>();
-        private List<ColorState> defaultColors = new List<ColorState>
-        {
-            new ColorState(255, 0, 0),
-            new ColorState(0, 0, 255),
-            new ColorState(192, 192, 0),
-            new ColorState(0, 255, 0),
-        };
 
         private int cnt = 0;
 
@@ -49,7 +42,7 @@ namespace SuperSnakeServer
                 || key.IsPressed(DX.KEY_INPUT_RETURN))
             {
                 var playerInfos = sessions
-                    .Select((si, i) => new PlayerInfo(si.PlayerName, defaultColors[i % defaultColors.Count]))
+                    .Select((si, i) => new PlayerInfo(si.PlayerName))
                     .ToList();
                 var game = new Game(InitialGameStateReader.Combine(initState, playerInfos));
 

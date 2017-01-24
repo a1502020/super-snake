@@ -13,7 +13,7 @@ oooooooooooo #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ff
 oooooooooooo #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff
 oooooooooooo #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff #ffffff
 4
-0 0 RightDown
-11 11 LeftUp
-11 0 LeftDown
-0 11 RightUp
+0 0 RightDown #ff0000
+11 11 LeftUp #0000ff
+11 0 LeftDown #ff8000
+0 11 RightUp #00ff00

@@ -76,8 +76,13 @@ namespace SuperSnake.Util
                     else if (sp[2] == "down") dir = Direction.Down;
                     else if (sp[2] == "rightdown") dir = Direction.RightDown;
                     else throw new FormatException();
+                    var col = new ColorState(
+                        int.Parse(sp[3].Substring(1, 2), System.Globalization.NumberStyles.HexNumber),
+                        int.Parse(sp[3].Substring(3, 2), System.Globalization.NumberStyles.HexNumber),
+                        int.Parse(sp[3].Substring(5, 2), System.Globalization.NumberStyles.HexNumber)
+                    );
 
-                    players.Add(new InitialPlayerState(new PositionState(px, py), new DirectionState(dir)));
+                    players.Add(new InitialPlayerState(new PositionState(px, py), new DirectionState(dir), col));
                 }
 
                 return new InitialGameState(new FieldState(name, cells), players);
@@ -100,7 +105,7 @@ namespace SuperSnake.Util
             {
                 var init = gameState.Players[i];
                 var info = playerInfos[i];
-                players.Add(new PlayerState(i, info.Name, info.Color, init.Position, init.Direction, true));
+                players.Add(new PlayerState(i, info.Name, init.Color, init.Position, init.Direction, true));
             }
 
             return new GameState(gameState.Field, players, 0);

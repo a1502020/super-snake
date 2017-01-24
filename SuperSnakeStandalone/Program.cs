@@ -35,16 +35,16 @@ namespace SuperSnakeStandalone
             var playerInfos = new List<PlayerInfo>();
             var clients = new List<Client>();
 
-            playerInfos.Add(new PlayerInfo("プレイヤー1", new ColorState(255, 0, 0)));
+            playerInfos.Add(new PlayerInfo("プレイヤー1"));
             clients.Add(new Clients.RansuchanClient());
 
-            playerInfos.Add(new PlayerInfo("プレイヤー2", new ColorState(0, 0, 255)));
+            playerInfos.Add(new PlayerInfo("プレイヤー2"));
             clients.Add(new Clients.RansuchanClient());
             
-            playerInfos.Add(new PlayerInfo("プレイヤー3", new ColorState(255, 128, 0)));
+            playerInfos.Add(new PlayerInfo("プレイヤー3"));
             clients.Add(new Clients.RansuchanClient());
             
-            playerInfos.Add(new PlayerInfo("プレイヤー4", new ColorState(0, 128, 0)));
+            playerInfos.Add(new PlayerInfo("プレイヤー4"));
             clients.Add(new Clients.RansuchanClient());
 
             // 初期状態でゲームを開始
