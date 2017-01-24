@@ -43,6 +43,7 @@ namespace SuperSnakeServer
         private List<bool> decided;
         private List<Action> actions;
         private List<bool> receiving, received;
+        private int marginSend = 0;
 
         protected override Phase update()
         {
@@ -82,8 +83,17 @@ namespace SuperSnakeServer
                     actions[playerNum] = Action.Straight;
                 }
 
-                // ゲームの状態等を送信
-                beginSend();
+                // 一定時間待ってからゲームの状態等を送信
+                marginSend = 20;
+            }
+
+            if (marginSend > 0)
+            {
+                --marginSend;
+                if (marginSend == 0)
+                {
+                    beginSend();
+                }
             }
 
             // 描画
