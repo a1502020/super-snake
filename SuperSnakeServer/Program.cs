@@ -50,7 +50,7 @@ namespace SuperSnakeServer
                         return Tuple.Create(name, (InitialGameState)null);
                     }
                 })
-                .Where(p => p.Item2 != null)
+                .Where(p => (object)p.Item2 != null)
                 .ToList();
             if (fields.Count == 0)
             {
