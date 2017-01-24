@@ -56,14 +56,14 @@ namespace SuperSnakeClient
                     state.Read(reader);
                 }
 
-                // ゲームが終了したらプログラム終了
+                // ゲームが終了したら結果フェーズへ
                 if (state.Finished)
                 {
-                    return null;
+                    return new ResultPhase(state);
                 }
 
                 // プレイヤーが死んでいなければ思考開始
-                if (state.GameState.Players[state.MyPlayerNum].Alive)
+                if (!state.Finished && state.GameState.Players[state.MyPlayerNum].Alive)
                 {
                     taskThink = Task.Run(() => client.Think(state.GameState, state.MyPlayerNum));
                 }

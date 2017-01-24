@@ -41,6 +41,7 @@
     <Compile Include="GamePhase.cs" />
     <Compile Include="Phase.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ResultPhase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SuperSnakeCore\SuperSnakeCore.csproj">
