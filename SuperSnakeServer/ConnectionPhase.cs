@@ -45,7 +45,8 @@ namespace SuperSnakeServer
         protected override Phase update()
         {
             // 最大人数接続するかエンターキーが押されたらゲームフェーズに移行する
-            if (sessions.Count == initState.PlayersCount || key.IsPressed(DX.KEY_INPUT_RETURN))
+            if ((sessions.Count == initState.PlayersCount && sessions.All(si => si.EntryReceived))
+                || key.IsPressed(DX.KEY_INPUT_RETURN))
             {
                 var playerInfos = sessions
                     .Select((si, i) => new PlayerInfo(si.PlayerName, defaultColors[i % defaultColors.Count]))
@@ -95,7 +96,7 @@ namespace SuperSnakeServer
             // エントリー情報を受信
             foreach (var si in sessions)
             {
-                if (si.Session != session)
+                if (si.Session != session || si.EntryReceived)
                 {
                     continue;
                 }
@@ -104,6 +105,7 @@ namespace SuperSnakeServer
                     if (reader.Peek() < 0) break;
                     si.PlayerName = reader.ReadLine();
                 }
+                si.EntryReceived = true;
                 break;
             }
         }

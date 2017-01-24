@@ -14,6 +14,7 @@ namespace SuperSnakeServer
         {
             this.Session = s;
             this.TaskSendGameState = null;
+            this.EntryReceived = false;
         }
 
         /// <summary>
@@ -30,6 +31,11 @@ namespace SuperSnakeServer
         /// プレイヤーの色
         /// </summary>
         public ColorState PlayerColor { get; set; }
+
+        /// <summary>
+        /// エントリー情報を受信したか否か
+        /// </summary>
+        public bool EntryReceived { get; set; }
 
         /// <summary>
         /// ゲームの状態送信タスク

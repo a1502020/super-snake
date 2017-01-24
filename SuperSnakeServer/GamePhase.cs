@@ -63,7 +63,9 @@ namespace SuperSnakeServer
 
             // すべての生きているプレイヤーの行動を受信したらステップ処理を行う
             if (Enumerable.Range(0, playersCount)
-                .All(playerNum => game.State.Players[playerNum].Dead || received[playerNum]))
+                .All(playerNum => !sessions[playerNum].Session.Connected
+                    || game.State.Players[playerNum].Dead
+                    || received[playerNum]))
             {
                 game.Step(actions);
 
@@ -77,6 +79,7 @@ namespace SuperSnakeServer
                 for (int playerNum = 0; playerNum < playersCount; playerNum++)
                 {
                     received[playerNum] = false;
+                    actions[playerNum] = Action.Straight;
                 }
 
                 // ゲームの状態等を送信
@@ -85,6 +88,51 @@ namespace SuperSnakeServer
 
             // 描画
             DX.DrawFillBox(0, 0, 640, 480, DX.GetColor(0, 0, 0));
+
+            // 各プレイヤーの状態を表示
+            var tbl = new int[playersCount, 4];
+            for (int i = 0; i < playersCount; i++)
+            {
+                var conn = sessions[i].Session.Connected;
+                var alive = game.State.Players[i].Alive;
+                tbl[i, 0] = (conn ? 1 : 2);
+                tbl[i, 1] = (alive ? 1 : 0);
+                tbl[i, 2] = (conn && tasksSend[i] != null ? 1 : 0);
+                tbl[i, 3] = (conn && alive && receiving[i] ? 1 : 0);
+            }
+            for (int i = 0; i < tbl.GetLength(0); i++)
+            {
+                var x = 112 + 20 * i;
+                var y = 478 - 20 * (tbl.GetLength(1) + 1);
+                var str = i.ToString();
+                var dx = DX.GetDrawStringWidth(str, str.Length);
+                DX.DrawString(x - dx / 2, y, str, DX.GetColor(128, 128, 128));
+            }
+            for (int j = 0; j < tbl.GetLength(1); j++)
+            {
+                var x = 98;
+                var y = 478 - 20 * (tbl.GetLength(1) - j);
+                var str = "";
+                if (j == 0) str = "接続";
+                if (j == 1) str = "生死";
+                if (j == 2) str = "送信中";
+                if (j == 3) str = "思考中";
+                var dx = DX.GetDrawStringWidth(str, str.Length);
+                DX.DrawString(x - dx, y, str, DX.GetColor(128, 128, 128));
+            }
+            for (int i = 0; i < tbl.GetLength(0); i++)
+            {
+                for (int j = 0; j < tbl.GetLength(1); j++)
+                {
+                    var x = 112 + 20 * i;
+                    var y = 468 - 20 * (tbl.GetLength(1) - 1 - j);
+                    var col = DX.GetColor(0, 0, 0);
+                    if (tbl[i, j] == 0) col = DX.GetColor(128, 128, 128);
+                    else if (tbl[i, j] == 1) col = DX.GetColor(0, 255, 0);
+                    else if (tbl[i, j] == 2) col = DX.GetColor(255, 0, 0);
+                    DX.DrawCircle(x, y, 8, col, DX.TRUE);
+                }
+            }
 
             gameStateDrawer.Draw(game.State);
 
@@ -127,6 +175,11 @@ namespace SuperSnakeServer
         {
             for (int playerNum = 0; playerNum < playersCount; playerNum++)
             {
+                if (!sessions[playerNum].Session.Connected)
+                {
+                    continue;
+                }
+
                 var sb = new StringBuilder();
                 var state = new GameStateText
                 {

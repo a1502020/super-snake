@@ -100,9 +100,16 @@ namespace SuperSnakeClient
             if ((object)state.GameState != null)
             {
                 gameStateDrawer.Draw(state.GameState);
-                DX.DrawString(2, 22, state.MyPlayerNum.ToString(), DX.GetColor(255, 255, 255));
+
+                // 自分のプレイヤー番号と色
+                var col = state.GameState.Players[state.MyPlayerNum].Color;
+                var str = state.MyPlayerNum.ToString();
+                var strw = DX.GetDrawStringWidth(str, str.Length);
+                DX.DrawFillBox(0, 20, 4 + strw, 40, DX.GetColor(255, 255, 255));
+                DX.DrawString(2, 22, state.MyPlayerNum.ToString(), DX.GetColor(col.R, col.G, col.B));
             }
 
+            // 状態
             var dots = new string('.', cnt / 30);
             if (taskReceive != null)
             {
