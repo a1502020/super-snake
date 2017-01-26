@@ -12,9 +12,24 @@ namespace SuperSnake.Util
     {
         public GameStateDrawer()
         {
-            BasePos = new Position(16, 16);
+            FieldBasePos = new Position(16, 16);
             CellSize = new Size(16, 16);
         }
+
+        /// <summary>
+        /// セル(0, 0)の左上の座標
+        /// </summary>
+        public Position FieldBasePos { get; set; }
+
+        /// <summary>
+        /// セルを描画する大きさ
+        /// </summary>
+        public Size CellSize { get; set; }
+
+        /// <summary>
+        /// プレイヤー一覧の左上の座標
+        /// </summary>
+        public Position PlayersBasePos { get; set; }
 
         /// <summary>
         /// ゲームの状態を描画する。
@@ -31,8 +46,8 @@ namespace SuperSnake.Util
                 for (var x = 0; x < field.Width; ++x)
                 {
                     var bas = new Position(
-                        BasePos.X + x * CellSize.Width,
-                        BasePos.Y + y * CellSize.Height);
+                        FieldBasePos.X + x * CellSize.Width,
+                        FieldBasePos.Y + y * CellSize.Height);
                     var col = field.Cells[x][y].Color;
 
                     DX.DrawFillBox(
@@ -42,7 +57,7 @@ namespace SuperSnake.Util
                 }
             }
 
-            // プレイヤー
+            // フィールド上のプレイヤー
             for (var i = 0; i < players.Count; ++i)
             {
                 var pos = players[i].Position;
@@ -63,8 +78,8 @@ namespace SuperSnake.Util
                 angle *= Math.PI / 4;
                 var r = Math.Min(CellSize.Width, CellSize.Height) / 2 - 1;
                 var center = new Position(
-                    BasePos.X + pos.X * CellSize.Width + CellSize.Width / 2,
-                    BasePos.Y + pos.Y * CellSize.Height + CellSize.Height / 2);
+                    FieldBasePos.X + pos.X * CellSize.Width + CellSize.Width / 2,
+                    FieldBasePos.Y + pos.Y * CellSize.Height + CellSize.Height / 2);
 
                 DX.DrawCircle(center.X, center.Y, r,
                     DX.GetColor(col.R, col.G, col.B), DX.FALSE);
@@ -73,16 +88,16 @@ namespace SuperSnake.Util
                     (int)(center.Y - r * Math.Sin(angle)),
                     DX.GetColor(col.R, col.G, col.B));
             }
+
+            // プレイヤー一覧
+            for (int i = 0; i < state.PlayersCount; i++)
+            {
+                var basePos = new Position(PlayersBasePos.X, PlayersBasePos.Y + 20 * i);
+                var col = state.Players[i].Color;
+                DX.DrawFillBox(basePos.X, basePos.Y, basePos.X + 20, basePos.Y + 20, DX.GetColor(255, 255, 255));
+                DX.DrawString(basePos.X + 2, basePos.Y + 2, i.ToString(), DX.GetColor(col.R, col.G, col.B));
+                DX.DrawString(basePos.X + 22, basePos.Y + 2, state.Players[i].Name, DX.GetColor(255, 255, 255));
+            }
         }
-
-        /// <summary>
-        /// (0, 0)の左上の座標
-        /// </summary>
-        public Position BasePos { get; set; }
-
-        /// <summary>
-        /// セルを描画する大きさ
-        /// </summary>
-        public Size CellSize { get; set; }
     }
 }

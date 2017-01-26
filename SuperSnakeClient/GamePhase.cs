@@ -23,7 +23,8 @@ namespace SuperSnakeClient
             buffSize = 1024 * 16;
             buff = new ArraySegment<byte>(new byte[buffSize]);
 
-            gameStateDrawer.BasePos = new Position(2, 42);
+            gameStateDrawer.FieldBasePos = new Position(2, 42);
+            gameStateDrawer.PlayersBasePos = new Position(440, 0);
         }
 
         private ClientWebSocket ws;
