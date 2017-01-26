@@ -20,7 +20,7 @@ namespace SuperSnakeClient
             this.ws = ws;
             this.client = client;
 
-            buffSize = 1024 * 16;
+            buffSize = 1024;
             buff = new ArraySegment<byte>(new byte[buffSize]);
 
             gameStateDrawer.FieldBasePos = new Position(2, 42);
@@ -29,7 +29,8 @@ namespace SuperSnakeClient
 
         private ClientWebSocket ws;
         private Client client;
-        private Task<WebSocketReceiveResult> taskReceive = null;
+        private Task<WebSocketReceiveResult> taskReceiveSize = null;
+        private Task<WebSocketReceiveResult> taskReceiveState = null;
         private int buffSize;
         private ArraySegment<byte> buff;
         private GameStateText state = new GameStateText();
@@ -40,16 +41,33 @@ namespace SuperSnakeClient
 
         protected override Phase update()
         {
-            // ゲームの状態と自分のプレイヤー番号を受信する
-            if (taskReceive == null && taskThink == null && taskSend == null)
+            // 必要バッファサイズを受信する
+            if (taskReceiveSize == null && taskReceiveState == null && taskThink == null && taskSend == null)
             {
-                taskReceive = ws.ReceiveAsync(buff, CancellationToken.None);
+                taskReceiveSize = ws.ReceiveAsync(buff, CancellationToken.None);
             }
-            if (taskReceive != null && taskReceive.IsCompleted)
+            if (taskReceiveSize != null && taskReceiveSize.IsCompleted)
             {
-                var res = taskReceive.Result;
-                taskReceive.Dispose();
-                taskReceive = null;
+                var res = taskReceiveSize.Result;
+                taskReceiveSize.Dispose();
+                taskReceiveSize = null;
+
+                var size = int.Parse(Encoding.UTF8.GetString(buff.Take(res.Count).ToArray()));
+                if (size > buffSize)
+                {
+                    buffSize = size;
+                    buff = new ArraySegment<byte>(new byte[buffSize]);
+                }
+
+                taskReceiveState = ws.ReceiveAsync(buff, CancellationToken.None);
+            }
+
+            // ゲームの状態と自分のプレイヤー番号を受信
+            if (taskReceiveState != null && taskReceiveState.IsCompleted)
+            {
+                var res = taskReceiveState.Result;
+                taskReceiveState.Dispose();
+                taskReceiveState = null;
 
                 var data = Encoding.UTF8.GetString(buff.Take(res.Count).ToArray());
                 using (var reader = new StringReader(data))
@@ -112,7 +130,7 @@ namespace SuperSnakeClient
 
             // 状態
             var dots = new string('.', cnt / 30);
-            if (taskReceive != null)
+            if (taskReceiveSize != null || taskReceiveState != null)
             {
                 DX.DrawString(2, 2,
                     string.Format("受信待ち中{0}", dots),

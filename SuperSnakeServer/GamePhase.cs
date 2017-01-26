@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Action = SuperSnake.Core.Action;
 
@@ -21,7 +22,9 @@ namespace SuperSnakeServer
             this.sessions = sessionInfos;
 
             playersCount = game.State.PlayersCount;
-            tasksSend = Enumerable.Repeat((Task)null, playersCount).ToList();
+            tasksSendState = Enumerable.Repeat((Task)null, playersCount).ToList();
+            tasksSendSize = Enumerable.Repeat((Task)null, playersCount).ToList();
+            stateStrs = Enumerable.Repeat("", playersCount).ToList();
             decided = Enumerable.Repeat(false, playersCount).ToList();
             actions = Enumerable.Repeat(Action.Straight, playersCount).ToList();
             receiving = Enumerable.Repeat(false, playersCount).ToList();
@@ -32,50 +35,72 @@ namespace SuperSnakeServer
             gameStateDrawer.FieldBasePos = new Position(2, 22);
             gameStateDrawer.PlayersBasePos = new Position(440, 0);
 
-            // ゲームの状態等を送信
-            beginSend();
+            beginSendBufferSize();
         }
 
         private Game game;
         private WebSocketServer server;
         private List<SessionInfo> sessions;
         private int playersCount;
-        private List<Task> tasksSend;
+        private List<Task> tasksSendState, tasksSendSize;
+        private List<string> stateStrs;
         private List<bool> decided;
         private List<Action> actions;
         private List<bool> receiving, received;
         private int marginSend = 0;
+        private bool finished = false;
 
         protected override Phase update()
         {
-            // 送信が完了したら行動の受信を開始
             for (int playerNum = 0; playerNum < playersCount; playerNum++)
             {
-                if (tasksSend[playerNum] != null && tasksSend[playerNum].IsCompleted)
+                // 必要バッファサイズを送信したら少し待ってゲームの状態を送信
+                if (tasksSendSize[playerNum] != null && tasksSendSize[playerNum].IsCompleted)
                 {
-                    tasksSend[playerNum].Dispose();
-                    tasksSend[playerNum] = null;
+                    tasksSendSize[playerNum].Dispose();
+                    tasksSendSize[playerNum] = null;
 
-                    if (game.State.Players[playerNum].Alive)
+                    var s = sessions[playerNum];
+                    var str = stateStrs[playerNum];
+                    tasksSendState[playerNum] = Task.Run(async () =>
+                    {
+                        Thread.Sleep(50);
+                        await s.Send(str);
+                    });
+                }
+
+                // 送信が完了したら行動の受信を開始
+                if (tasksSendState[playerNum] != null && tasksSendState[playerNum].IsCompleted)
+                {
+                    tasksSendState[playerNum].Dispose();
+                    tasksSendState[playerNum] = null;
+
+                    if (!finished && game.State.Players[playerNum].Alive)
                     {
                         receiving[playerNum] = true;
                     }
                 }
             }
 
+            // 結果フェーズへ
+            if (finished && tasksSendSize.All(t => t == null) && tasksSendState.All(t => t == null))
+            {
+                return new ResultPhase(game);
+            }
+
             // すべての生きているプレイヤーの行動を受信したらステップ処理を行う
-            if (Enumerable.Range(0, playersCount)
+            if (!finished && (Enumerable.Range(0, playersCount)
                 .All(playerNum => !sessions[playerNum].Session.Connected
                     || game.State.Players[playerNum].Dead
-                    || received[playerNum]))
+                    || received[playerNum])))
             {
                 game.Step(actions);
 
-                // ゲームが終了したら結果フェーズへ
+                // ゲームが終了したらゲームの状態を送信して結果フェーズへ
                 if (game.State.Players.Count(player => player.Alive) <= 1)
                 {
-                    beginSend(finished: true);
-                    return new ResultPhase(game);
+                    finished = true;
+                    beginSendBufferSize();
                 }
 
                 for (int playerNum = 0; playerNum < playersCount; playerNum++)
@@ -84,7 +109,7 @@ namespace SuperSnakeServer
                     actions[playerNum] = Action.Straight;
                 }
 
-                // 一定時間待ってからゲームの状態等を送信
+                // 一定時間待ってから必要バッファサイズを送信
                 marginSend = 20;
             }
 
@@ -93,7 +118,7 @@ namespace SuperSnakeServer
                 --marginSend;
                 if (marginSend == 0)
                 {
-                    beginSend();
+                    beginSendBufferSize();
                 }
             }
 
@@ -106,9 +131,10 @@ namespace SuperSnakeServer
             {
                 var conn = sessions[i].Session.Connected;
                 var alive = game.State.Players[i].Alive;
+                var sending = conn && (tasksSendSize[i] != null || tasksSendState[i] != null);
                 tbl[i, 0] = (conn ? 1 : 2);
                 tbl[i, 1] = (alive ? 1 : 0);
-                tbl[i, 2] = (conn && tasksSend[i] != null ? 1 : 0);
+                tbl[i, 2] = (sending ? 1 : 0);
                 tbl[i, 3] = (conn && alive && receiving[i] ? 1 : 0);
             }
             for (int i = 0; i < tbl.GetLength(0); i++)
@@ -182,7 +208,7 @@ namespace SuperSnakeServer
             }
         }
 
-        private void beginSend(bool finished = false)
+        private void beginSendBufferSize()
         {
             for (int playerNum = 0; playerNum < playersCount; playerNum++)
             {
@@ -202,8 +228,10 @@ namespace SuperSnakeServer
                 {
                     state.Write(writer);
                 }
+                stateStrs[playerNum] = sb.ToString();
                 var s = sessions[playerNum].Session;
-                tasksSend[playerNum] = Task.Run(() => s.Send(sb.ToString()));
+                var size = Encoding.UTF8.GetByteCount(stateStrs[playerNum] + 1);
+                tasksSendSize[playerNum] = Task.Run(() => s.Send(size.ToString()));
             }
         }
     }
