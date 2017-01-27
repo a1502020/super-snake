@@ -27,6 +27,8 @@ namespace SuperSnakeServer
             actions = Enumerable.Repeat(Action.Straight, playersCount).ToList();
             receiving = Enumerable.Repeat(false, playersCount).ToList();
             received = Enumerable.Repeat(false, playersCount).ToList();
+            timeoutCount = Enumerable.Repeat(-1, playersCount).ToList();
+            timeoutCountLock = Enumerable.Repeat((object)null, playersCount).ToList();
 
             server.NewMessageReceived += serverNewMessageReceived;
 
@@ -44,6 +46,8 @@ namespace SuperSnakeServer
         private List<bool> decided;
         private List<Action> actions;
         private List<bool> receiving, received;
+        private List<int> timeoutCount;
+        private List<object> timeoutCountLock;
         private int marginSend = 0;
         private bool finished = false;
 
@@ -60,7 +64,14 @@ namespace SuperSnakeServer
                     if (!finished && game.State.Players[playerNum].Alive)
                     {
                         receiving[playerNum] = true;
+                        timeoutCount[playerNum] = 10 * 60;
                     }
+                }
+
+                // タイムアウト時間計測
+                if (timeoutCount[playerNum] > 0)
+                {
+                    --timeoutCount[playerNum];
                 }
             }
 
@@ -74,7 +85,8 @@ namespace SuperSnakeServer
             if (!finished && (Enumerable.Range(0, playersCount)
                 .All(playerNum => !sessions[playerNum].Session.Connected
                     || game.State.Players[playerNum].Dead
-                    || received[playerNum])))
+                    || received[playerNum]
+                    || timeoutCount[playerNum] == 0)))
             {
                 game.Step(actions);
 
@@ -171,6 +183,7 @@ namespace SuperSnakeServer
                 if (receiving[playerNum])
                 {
                     receiving[playerNum] = false;
+                    timeoutCount[playerNum] = -1;
 
                     using (var reader = new StringReader(value))
                     {

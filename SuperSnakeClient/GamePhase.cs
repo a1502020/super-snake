@@ -25,6 +25,8 @@ namespace SuperSnakeClient
 
             gameStateDrawer.FieldBasePos = new Position(2, 42);
             gameStateDrawer.PlayersBasePos = new Position(440, 0);
+
+            taskReceiveSize = ws.ReceiveAsync(buff, CancellationToken.None);
         }
 
         private ClientWebSocket ws;
@@ -42,15 +44,14 @@ namespace SuperSnakeClient
         protected override Phase update()
         {
             // 必要バッファサイズを受信する
-            if (taskReceiveSize == null && taskReceiveState == null && taskThink == null && taskSend == null)
-            {
-                taskReceiveSize = ws.ReceiveAsync(buff, CancellationToken.None);
-            }
             if (taskReceiveSize != null && taskReceiveSize.IsCompleted)
             {
                 var res = taskReceiveSize.Result;
                 taskReceiveSize.Dispose();
                 taskReceiveSize = null;
+
+                // タイムアウトなら前回の思考タスクを無視
+                taskThink = null;
 
                 var size = int.Parse(Encoding.UTF8.GetString(buff.Take(res.Count).ToArray()));
                 if (size > buffSize)
@@ -86,6 +87,8 @@ namespace SuperSnakeClient
                 {
                     taskThink = Task.Run(() => client.Think(state.GameState, state.MyPlayerNum));
                 }
+
+                taskReceiveSize = ws.ReceiveAsync(buff, CancellationToken.None);
             }
 
             // 思考結果を送信する
@@ -130,7 +133,7 @@ namespace SuperSnakeClient
 
             // 状態
             var dots = new string('.', cnt / 30);
-            if (taskReceiveSize != null || taskReceiveState != null)
+            if ((taskReceiveSize != null || taskReceiveState != null) && taskThink == null)
             {
                 DX.DrawString(2, 2,
                     string.Format("受信待ち中{0}", dots),
