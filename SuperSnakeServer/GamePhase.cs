@@ -172,11 +172,30 @@ namespace SuperSnakeServer
 
         private void serverNewMessageReceived(WebSocketSession session, string value)
         {
+            var isMessage = false;
+            var mes = "";
+            using (var reader = new StringReader(value))
+            {
+                if (reader.Peek() >= 0)
+                {
+                    var line = reader.ReadLine();
+                    isMessage = (line == "Message");
+                    if (isMessage && reader.Peek() >= 0) mes = reader.ReadLine();
+                }
+            }
+
             for (int playerNum = 0; playerNum < playersCount; playerNum++)
             {
                 if (sessions[playerNum].Session != session)
                 {
                     continue;
+                }
+
+                // メッセージを受信
+                if (isMessage)
+                {
+                    Console.Error.WriteLine("{0}: {1}", playerNum, mes);
+                    break;
                 }
 
                 // 行動を受信
@@ -222,6 +241,7 @@ namespace SuperSnakeServer
                 };
                 using (var writer = new StringWriter(sb))
                 {
+                    writer.WriteLine("GameState");
                     state.Write(writer);
                 }
                 var str = sb.ToString();

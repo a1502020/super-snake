@@ -28,6 +28,39 @@ namespace SuperSnake.Util
         }
 
         /// <summary>
+        /// メッセージを送信する。
+        /// </summary>
+        /// <param name="message"></param>
+        protected void sendMessage(string message)
+        {
+            if (Encoding.UTF8.GetByteCount(message) >= 1024)
+            {
+                throw new TooLongMessageException(message);
+            }
+            MessageSending(message);
+        }
+
+        /// <summary>
+        /// メッセージを受信した際に呼ばれるメソッド。
+        /// </summary>
+        /// <param name="playerNum"></param>
+        /// <param name="message"></param>
+        public virtual void MessageReceived(int playerNum, string message)
+        {
+        }
+
+        /// <summary>
+        /// メッセージ送信のイベントハンドラ
+        /// </summary>
+        /// <param name="message"></param>
+        public delegate void MessageSendingEventHandler(string message);
+
+        /// <summary>
+        /// メッセージを送信する際のイベント
+        /// </summary>
+        public event MessageSendingEventHandler MessageSending;
+
+        /// <summary>
         /// 与えられた位置から与えられた方向に進んだ次の位置を求める。
         /// 例えば (1, 2), Right を渡すと (2, 2) を返す。
         /// </summary>

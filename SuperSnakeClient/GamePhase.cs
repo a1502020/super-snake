@@ -26,6 +26,8 @@ namespace SuperSnakeClient
             gameStateDrawer.FieldBasePos = new Position(2, 42);
             gameStateDrawer.PlayersBasePos = new Position(440, 0);
 
+            client.MessageSending += sendMessage;
+
             taskReceiveSize = ws.ReceiveAsync(buff, CancellationToken.None);
         }
 
@@ -38,6 +40,8 @@ namespace SuperSnakeClient
         private GameStateText state = new GameStateText();
         private Task<Action> taskThink = null;
         private Task taskSend = null;
+        private Queue<string> messageQueue = new Queue<string>();
+        private Task taskSendMessage = null;
 
         private int cnt = 0;
 
@@ -50,17 +54,27 @@ namespace SuperSnakeClient
                 taskReceiveSize.Dispose();
                 taskReceiveSize = null;
 
-                // タイムアウトなら前回の思考タスクを無視
-                taskThink = null;
-
-                var size = int.Parse(Encoding.UTF8.GetString(buff.Take(res.Count).ToArray()));
-                if (size > buffSize)
+                if (isMessage(res, buff))
                 {
-                    buffSize = size;
-                    buff = new ArraySegment<byte>(new byte[buffSize]);
-                }
+                    var temp = readMessage(res, buff);
+                    client.MessageReceived(temp.Item1, temp.Item2);
 
-                taskReceiveState = ws.ReceiveAsync(buff, CancellationToken.None);
+                    taskReceiveSize = ws.ReceiveAsync(buff, CancellationToken.None);
+                }
+                else
+                {
+                    // タイムアウトなら前回の思考タスクを無視
+                    taskThink = null;
+
+                    var size = int.Parse(Encoding.UTF8.GetString(buff.Take(res.Count).ToArray()));
+                    if (size > buffSize)
+                    {
+                        buffSize = size;
+                        buff = new ArraySegment<byte>(new byte[buffSize]);
+                    }
+
+                    taskReceiveState = ws.ReceiveAsync(buff, CancellationToken.None);
+                }
             }
 
             // ゲームの状態と自分のプレイヤー番号を受信
@@ -70,29 +84,43 @@ namespace SuperSnakeClient
                 taskReceiveState.Dispose();
                 taskReceiveState = null;
 
-                var data = Encoding.UTF8.GetString(buff.Take(res.Count).ToArray());
-                using (var reader = new StringReader(data))
+                if (isMessage(res, buff))
                 {
-                    state.Read(reader);
-                }
+                    var temp = readMessage(res, buff);
+                    client.MessageReceived(temp.Item1, temp.Item2);
 
-                // ゲームが終了したら結果フェーズへ
-                if (state.Finished)
+                    taskReceiveState = ws.ReceiveAsync(buff, CancellationToken.None);
+                }
+                else
                 {
-                    return new ResultPhase(state);
-                }
+                    var data = Encoding.UTF8.GetString(buff.Take(res.Count).ToArray());
+                    using (var reader = new StringReader(data))
+                    {
+                        if (reader.Peek() < 0 || reader.ReadLine() != "GameState")
+                        {
+                            throw new FormatException();
+                        }
+                        state.Read(reader);
+                    }
 
-                // プレイヤーが死んでいなければ思考開始
-                if (!state.Finished && state.GameState.Players[state.MyPlayerNum].Alive)
-                {
-                    taskThink = Task.Run(() => client.Think(state.GameState, state.MyPlayerNum));
-                }
+                    // ゲームが終了したら結果フェーズへ
+                    if (state.Finished)
+                    {
+                        return new ResultPhase(state);
+                    }
 
-                taskReceiveSize = ws.ReceiveAsync(buff, CancellationToken.None);
+                    // プレイヤーが死んでいなければ思考開始
+                    if (!state.Finished && state.GameState.Players[state.MyPlayerNum].Alive)
+                    {
+                        taskThink = Task.Run(() => client.Think(state.GameState, state.MyPlayerNum));
+                    }
+
+                    taskReceiveSize = ws.ReceiveAsync(buff, CancellationToken.None);
+                }
             }
 
             // 思考結果を送信する
-            if (taskThink != null && taskThink.IsCompleted)
+            if (taskThink != null && taskThink.IsCompleted && taskSendMessage == null)
             {
                 var res = taskThink.Result;
                 taskThink.Dispose();
@@ -114,6 +142,20 @@ namespace SuperSnakeClient
             {
                 taskSend.Dispose();
                 taskSend = null;
+            }
+
+            // メッセージ送信
+            if (messageQueue.Count != 0 && taskSendMessage == null && taskSend == null)
+            {
+                var mes = messageQueue.Dequeue();
+                var str = string.Format("Message" + Environment.NewLine + "{0}", mes);
+                var data = new ArraySegment<byte>(Encoding.UTF8.GetBytes(str));
+                taskSendMessage = ws.SendAsync(data, WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+            if (taskSendMessage != null && taskSendMessage.IsCompleted)
+            {
+                taskSendMessage.Dispose();
+                taskSendMessage = null;
             }
 
             // 描画
@@ -156,6 +198,43 @@ namespace SuperSnakeClient
             if (cnt >= 120) cnt = 0;
 
             return this;
+        }
+
+        private void sendMessage(string message)
+        {
+            messageQueue.Enqueue(message);
+        }
+
+        private bool isMessage(WebSocketReceiveResult res, ArraySegment<byte> buff)
+        {
+            var str = Encoding.UTF8.GetString(buff.Take(res.Count).ToArray());
+            using (var reader = new StringReader(str))
+            {
+                if (reader.Peek() < 0) return false;
+                var line = reader.ReadLine();
+                return line == "Message";
+            }
+        }
+
+        private Tuple<int, string> readMessage(WebSocketReceiveResult res, ArraySegment<byte> buff)
+        {
+            var str = Encoding.UTF8.GetString(buff.Take(res.Count).ToArray());
+            using (var reader = new StringReader(str))
+            {
+                if (reader.Peek() < 0) throw new FormatException();
+                var line = reader.ReadLine();
+                if (line != "Message") throw new FormatException();
+
+                if (reader.Peek() < 0) throw new FormatException();
+                line = reader.ReadLine();
+                var playerNum = int.Parse(line);
+
+                if (reader.Peek() < 0) throw new FormatException();
+                line = reader.ReadLine();
+                var mes = line;
+
+                return Tuple.Create(playerNum, mes);
+            }
         }
     }
 }
