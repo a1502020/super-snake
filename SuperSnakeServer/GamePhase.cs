@@ -22,9 +22,7 @@ namespace SuperSnakeServer
             this.sessions = sessionInfos;
 
             playersCount = game.State.PlayersCount;
-            tasksSendState = Enumerable.Repeat((Task)null, playersCount).ToList();
-            tasksSendSize = Enumerable.Repeat((Task)null, playersCount).ToList();
-            stateStrs = Enumerable.Repeat("", playersCount).ToList();
+            tasksSend = Enumerable.Repeat((Task)null, playersCount).ToList();
             decided = Enumerable.Repeat(false, playersCount).ToList();
             actions = Enumerable.Repeat(Action.Straight, playersCount).ToList();
             receiving = Enumerable.Repeat(false, playersCount).ToList();
@@ -35,15 +33,14 @@ namespace SuperSnakeServer
             gameStateDrawer.FieldBasePos = new Position(2, 22);
             gameStateDrawer.PlayersBasePos = new Position(440, 0);
 
-            beginSendBufferSize();
+            beginSend();
         }
 
         private Game game;
         private WebSocketServer server;
         private List<SessionInfo> sessions;
         private int playersCount;
-        private List<Task> tasksSendState, tasksSendSize;
-        private List<string> stateStrs;
+        private List<Task> tasksSend;
         private List<bool> decided;
         private List<Action> actions;
         private List<bool> receiving, received;
@@ -54,26 +51,11 @@ namespace SuperSnakeServer
         {
             for (int playerNum = 0; playerNum < playersCount; playerNum++)
             {
-                // 必要バッファサイズを送信したら少し待ってゲームの状態を送信
-                if (tasksSendSize[playerNum] != null && tasksSendSize[playerNum].IsCompleted)
-                {
-                    tasksSendSize[playerNum].Dispose();
-                    tasksSendSize[playerNum] = null;
-
-                    var s = sessions[playerNum];
-                    var str = stateStrs[playerNum];
-                    tasksSendState[playerNum] = Task.Run(async () =>
-                    {
-                        Thread.Sleep(50);
-                        await s.Send(str);
-                    });
-                }
-
                 // 送信が完了したら行動の受信を開始
-                if (tasksSendState[playerNum] != null && tasksSendState[playerNum].IsCompleted)
+                if (tasksSend[playerNum] != null && tasksSend[playerNum].IsCompleted)
                 {
-                    tasksSendState[playerNum].Dispose();
-                    tasksSendState[playerNum] = null;
+                    tasksSend[playerNum].Dispose();
+                    tasksSend[playerNum] = null;
 
                     if (!finished && game.State.Players[playerNum].Alive)
                     {
@@ -83,7 +65,7 @@ namespace SuperSnakeServer
             }
 
             // 結果フェーズへ
-            if (finished && tasksSendSize.All(t => t == null) && tasksSendState.All(t => t == null))
+            if (finished && tasksSend.All(t => t == null))
             {
                 return new ResultPhase(game);
             }
@@ -100,7 +82,7 @@ namespace SuperSnakeServer
                 if (game.State.Players.Count(player => player.Alive) <= 1)
                 {
                     finished = true;
-                    beginSendBufferSize();
+                    beginSend();
                 }
 
                 for (int playerNum = 0; playerNum < playersCount; playerNum++)
@@ -109,7 +91,7 @@ namespace SuperSnakeServer
                     actions[playerNum] = Action.Straight;
                 }
 
-                // 一定時間待ってから必要バッファサイズを送信
+                // 一定時間待ってからゲームの状態等を送信
                 marginSend = 20;
             }
 
@@ -118,7 +100,7 @@ namespace SuperSnakeServer
                 --marginSend;
                 if (marginSend == 0)
                 {
-                    beginSendBufferSize();
+                    beginSend();
                 }
             }
 
@@ -131,7 +113,7 @@ namespace SuperSnakeServer
             {
                 var conn = sessions[i].Session.Connected;
                 var alive = game.State.Players[i].Alive;
-                var sending = conn && (tasksSendSize[i] != null || tasksSendState[i] != null);
+                var sending = conn && tasksSend[i] != null;
                 tbl[i, 0] = (conn ? 1 : 2);
                 tbl[i, 1] = (alive ? 1 : 0);
                 tbl[i, 2] = (sending ? 1 : 0);
@@ -208,7 +190,7 @@ namespace SuperSnakeServer
             }
         }
 
-        private void beginSendBufferSize()
+        private void beginSend()
         {
             for (int playerNum = 0; playerNum < playersCount; playerNum++)
             {
@@ -217,6 +199,7 @@ namespace SuperSnakeServer
                     continue;
                 }
 
+                // 送信する文字列
                 var sb = new StringBuilder();
                 var state = new GameStateText
                 {
@@ -228,10 +211,18 @@ namespace SuperSnakeServer
                 {
                     state.Write(writer);
                 }
-                stateStrs[playerNum] = sb.ToString();
+                var str = sb.ToString();
+
+                // 必要なバッファサイズ
+                var size = Encoding.UTF8.GetByteCount(str) + 1;
+
                 var s = sessions[playerNum].Session;
-                var size = Encoding.UTF8.GetByteCount(stateStrs[playerNum] + 1);
-                tasksSendSize[playerNum] = Task.Run(() => s.Send(size.ToString()));
+                tasksSend[playerNum] = Task.Run(() =>
+                {
+                    s.Send(size.ToString());
+                    Thread.Sleep(50);
+                    s.Send(str);
+                });
             }
         }
     }
