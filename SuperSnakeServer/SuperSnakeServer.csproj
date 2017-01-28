@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="ConnectionPhase.cs" />
     <Compile Include="GamePhase.cs" />
+    <Compile Include="MessageInfo.cs" />
     <Compile Include="Phase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

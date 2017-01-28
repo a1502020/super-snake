@@ -50,6 +50,9 @@ namespace SuperSnakeServer
         private List<object> timeoutCountLock;
         private int marginSend = 0;
         private bool finished = false;
+        private LinkedList<MessageInfo> messages = new LinkedList<MessageInfo>();
+        private object lockMessages = new object();
+        private int maxMessages = 3;
 
         protected override Phase update()
         {
@@ -118,6 +121,27 @@ namespace SuperSnakeServer
 
             // 描画
             DX.DrawFillBox(0, 0, 640, 480, DX.GetColor(0, 0, 0));
+
+            // メッセージを表示
+            lock(lockMessages)
+            {
+                foreach (var temp in messages.Select((mes, i) => new { mes, i }))
+                {
+                    var i = temp.i;
+                    var sender = temp.mes.Sender;
+                    var content = temp.mes.Content;
+                    var p = game.State.Players[sender];
+                    var name = p.Name;
+                    var col = p.Color;
+
+                    var x = 2;
+                    var y = 300 + i * 20;
+                    DX.DrawFillBox(x, y, x + 20, y + 20, DX.GetColor(255, 255, 255));
+                    DX.DrawString(x + 2, y + 2, sender.ToString(), DX.GetColor(col.R, col.G, col.B));
+                    x += 20;
+                    DX.DrawString(x + 2, y + 2, string.Format("{0}: {1}", name, content), DX.GetColor(255, 255, 255));
+                }
+            }
 
             // 各プレイヤーの状態を表示
             var tbl = new int[playersCount, 4];
@@ -194,7 +218,18 @@ namespace SuperSnakeServer
                 // メッセージを受信
                 if (isMessage)
                 {
-                    Console.Error.WriteLine("{0}: {1}", playerNum, mes);
+                    lock(lockMessages)
+                    {
+                        messages.AddFirst(new MessageInfo()
+                        {
+                            Content = value,
+                            Sender = playerNum,
+                        });
+                        if (messages.Count > maxMessages)
+                        {
+                            messages.RemoveLast();
+                        }
+                    }
                     break;
                 }
 
