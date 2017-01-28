@@ -12,16 +12,25 @@ namespace SuperSnake.Core
     /// </summary>
     public class GameState
     {
-        public FieldState Field { get; private set; }
-        public int PlayersCount { get { return Players.Count; } }
-        public IList<PlayerState> Players { get; private set; }
-        public int Turn { get; private set; }
+        public readonly FieldState Field;
+        public readonly int PlayersCount;
+        public readonly IList<PlayerState> Players;
+        public readonly int Turn;
+        public readonly bool Finished;
+        public readonly PlayerState Winner;
+        public readonly int WinnerPlayerNum;
 
         public GameState(FieldState field, IList<PlayerState> players, int turn)
         {
             this.Field = field;
+            this.PlayersCount = players.Count;
             this.Players = players.ToList().AsReadOnly();
             this.Turn = turn;
+            this.Finished = players.Count(player => player.Alive) <= 1;
+            this.Winner = Finished ? players.FirstOrDefault(player => player.Alive) : null;
+            this.WinnerPlayerNum = ((object)this.Winner == null)
+                ? -1
+                : Enumerable.Range(0, PlayersCount).First(i => players[i] == this.Winner);
         }
 
         public override bool Equals(object obj)

@@ -42,6 +42,9 @@ namespace SuperSnakeCoreTest
             Assert.IsTrue(g1.Players.Count == g1.PlayersCount);
             Assert.IsTrue(g1.Players[0] == PlayerStateTest.CreateDummyPlayerState1());
             Assert.IsTrue(g1.Turn == 0);
+            Assert.IsTrue(g1.Finished);
+            Assert.IsTrue(g1.Winner == g1.Players[0]);
+            Assert.IsTrue(g1.WinnerPlayerNum == 0);
 
             // turn: 123
             // field:
@@ -71,6 +74,31 @@ namespace SuperSnakeCoreTest
             Assert.IsTrue(g2.Players[0] == PlayerStateTest.CreateDummyPlayerState1());
             Assert.IsTrue(g2.Players[1] == PlayerStateTest.CreateDummyPlayerState2());
             Assert.IsTrue(g2.Turn == 123);
+            Assert.IsTrue(g2.Finished);
+            Assert.IsTrue(g2.Winner == g2.Players[0]);
+            Assert.IsTrue(g2.WinnerPlayerNum == 0);
+
+            // turn: 0
+            // field:
+            // "field1", 2x2
+            // xo #ff0000 #000000
+            // ox #000000 #0000ff
+            // players[0]:
+            // 1, "player1", #ff0000
+            // (1, 1), Right, Alive
+            // players[1]:
+            // 3, "player1", #ff0000
+            // (1, 1), Right, Alive
+            var g1c = CreateDummyGameState1c();
+            Assert.IsTrue(g1c.Field == FieldStateTest.CreateDummyFieldState1());
+            Assert.IsTrue(g1c.PlayersCount == 2);
+            Assert.IsTrue(g1c.Players.Count == g1c.PlayersCount);
+            Assert.IsTrue(g1c.Players[0] == PlayerStateTest.CreateDummyPlayerState1());
+            Assert.IsTrue(g1c.Players[1] == PlayerStateTest.CreateDummyPlayerState1a());
+            Assert.IsTrue(g1c.Turn == 0);
+            Assert.IsFalse(g1c.Finished);
+            Assert.IsTrue((object)g1c.Winner == null);
+            Assert.IsTrue(g1c.WinnerPlayerNum == -1);
         }
 
         /// <summary>
