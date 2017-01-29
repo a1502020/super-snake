@@ -33,6 +33,7 @@ namespace SuperSnakeServer
             server.NewMessageReceived += serverNewMessageReceived;
 
             gameStateDrawer.FieldBasePos = new Position(2, 22);
+            gameStateDrawer.FieldRightBottomPos = new Position(438, 378 - 20 * maxMessages - 2);
             gameStateDrawer.PlayersBasePos = new Position(440, 0);
 
             beginSend();
@@ -133,7 +134,7 @@ namespace SuperSnakeServer
                     var col = p.Color;
 
                     var x = 2;
-                    var y = 300 + i * 20;
+                    var y = 478 - 20 * 5 - 20 * maxMessages;
                     DX.DrawFillBox(x, y, x + 20, y + 20, DX.GetColor(255, 255, 255));
                     DX.DrawString(x + 2, y + 2, sender.ToString(), DX.GetColor(col.R, col.G, col.B));
                     x += 20;
@@ -156,7 +157,7 @@ namespace SuperSnakeServer
             for (int i = 0; i < tbl.GetLength(0); i++)
             {
                 var x = 112 + 20 * i;
-                var y = 478 - 20 * (tbl.GetLength(1) + 1);
+                var y = 478 - 20 * 5;
                 var str = i.ToString();
                 var dx = DX.GetDrawStringWidth(str, str.Length);
                 DX.DrawString(x - dx / 2, y, str, DX.GetColor(128, 128, 128));

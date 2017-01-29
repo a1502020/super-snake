@@ -13,7 +13,7 @@ namespace SuperSnake.Util
         public GameStateDrawer()
         {
             FieldBasePos = new Position(16, 16);
-            CellSize = new Size(16, 16);
+            FieldRightBottomPos = new Position(640 - 16, 480 - 16);
         }
 
         /// <summary>
@@ -22,9 +22,9 @@ namespace SuperSnake.Util
         public Position FieldBasePos { get; set; }
 
         /// <summary>
-        /// セルを描画する大きさ
+        /// 最も右下のセルの右下の座標
         /// </summary>
-        public Size CellSize { get; set; }
+        public Position FieldRightBottomPos { get; set; }
 
         /// <summary>
         /// プレイヤー一覧の左上の座標
@@ -40,19 +40,25 @@ namespace SuperSnake.Util
             var field = state.Field;
             var players = state.Players;
 
+            var lt = FieldBasePos;
+            var rb = FieldRightBottomPos;
+            var s1 = (field.Width > 0) ? (rb.X - lt.X) / field.Width : 0;
+            var s2 = (field.Height > 0) ? (rb.Y - lt.Y) / field.Height : 0;
+            var wh = Math.Min(s1, s2);
+
             // フィールド
             for (var y = 0; y < field.Height; ++y)
             {
                 for (var x = 0; x < field.Width; ++x)
                 {
                     var bas = new Position(
-                        FieldBasePos.X + x * CellSize.Width,
-                        FieldBasePos.Y + y * CellSize.Height);
+                        FieldBasePos.X + x * wh,
+                        FieldBasePos.Y + y * wh);
                     var col = field.Cells[x][y].Color;
 
                     DX.DrawFillBox(
                         bas.X, bas.Y,
-                        bas.X + CellSize.Width, bas.Y + CellSize.Height,
+                        bas.X + wh, bas.Y + wh,
                         DX.GetColor(col.R, col.G, col.B));
                 }
             }
@@ -76,10 +82,10 @@ namespace SuperSnake.Util
                     case Direction.RightDown: angle = 7; break;
                 }
                 angle *= Math.PI / 4;
-                var r = Math.Min(CellSize.Width, CellSize.Height) / 2 - 1;
+                var r = Math.Min(wh, wh) / 2 - 1;
                 var center = new Position(
-                    FieldBasePos.X + pos.X * CellSize.Width + CellSize.Width / 2,
-                    FieldBasePos.Y + pos.Y * CellSize.Height + CellSize.Height / 2);
+                    FieldBasePos.X + pos.X * wh + wh / 2,
+                    FieldBasePos.Y + pos.Y * wh + wh / 2);
 
                 DX.DrawCircle(center.X, center.Y, r,
                     DX.GetColor(col.R, col.G, col.B), DX.FALSE);

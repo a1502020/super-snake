@@ -24,6 +24,7 @@ namespace SuperSnakeClient
             buff = new ArraySegment<byte>(new byte[buffSize]);
 
             gameStateDrawer.FieldBasePos = new Position(2, 42);
+            gameStateDrawer.FieldRightBottomPos = new Position(438, 478);
             gameStateDrawer.PlayersBasePos = new Position(440, 0);
 
             client.MessageSending += sendMessage;
