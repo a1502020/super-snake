@@ -23,15 +23,10 @@ namespace SuperSnakeServer
             DX.DrawFillBox(0, 0, 640, 480, DX.GetColor(0, 0, 0));
 
             // 結果を表示
-            var str = "引き分け";
-            for (int playerNum = 0; playerNum < game.State.PlayersCount; playerNum++)
-            {
-                if (game.State.Players[playerNum].Alive)
-                {
-                    str = string.Format("プレイヤー{0}: {1} の勝ち！",
-                        playerNum, game.State.Players[playerNum].Name);
-                }
-            }
+            var str = (game.State.WinnerPlayerNum < 0)
+                ? "引き分け"
+                : string.Format("プレイヤー{0}: {1} の勝ち！",
+                    game.State.WinnerPlayerNum, game.State.Winner.Name);
             DX.DrawString(2, 2, str, DX.GetColor(255, 255, 255));
 
             gameStateDrawer.Draw(game.State);

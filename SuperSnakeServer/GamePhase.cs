@@ -49,7 +49,6 @@ namespace SuperSnakeServer
         private List<int> timeoutCount;
         private List<object> timeoutCountLock;
         private int marginSend = 0;
-        private bool finished = false;
         private LinkedList<MessageInfo> messages = new LinkedList<MessageInfo>();
         private object lockMessages = new object();
         private int maxMessages = 3;
@@ -64,7 +63,7 @@ namespace SuperSnakeServer
                     tasksSend[playerNum].Dispose();
                     tasksSend[playerNum] = null;
 
-                    if (!finished && game.State.Players[playerNum].Alive)
+                    if (!game.State.Finished && game.State.Players[playerNum].Alive)
                     {
                         receiving[playerNum] = true;
                         timeoutCount[playerNum] = 10 * 60;
@@ -79,13 +78,13 @@ namespace SuperSnakeServer
             }
 
             // 結果フェーズへ
-            if (finished && tasksSend.All(t => t == null))
+            if (game.State.Finished && tasksSend.All(t => t == null))
             {
                 return new ResultPhase(game);
             }
 
             // すべての生きているプレイヤーの行動を受信したらステップ処理を行う
-            if (!finished && (Enumerable.Range(0, playersCount)
+            if (!game.State.Finished && (Enumerable.Range(0, playersCount)
                 .All(playerNum => !sessions[playerNum].Session.Connected
                     || game.State.Players[playerNum].Dead
                     || received[playerNum]
@@ -94,9 +93,8 @@ namespace SuperSnakeServer
                 game.Step(actions);
 
                 // ゲームが終了したらゲームの状態を送信して結果フェーズへ
-                if (game.State.Players.Count(player => player.Alive) <= 1)
+                if (game.State.Finished)
                 {
-                    finished = true;
                     beginSend();
                 }
 
@@ -272,7 +270,7 @@ namespace SuperSnakeServer
                 {
                     GameState = game.State,
                     MyPlayerNum = playerNum,
-                    Finished = finished,
+                    Finished = game.State.Finished,
                 };
                 using (var writer = new StringWriter(sb))
                 {
